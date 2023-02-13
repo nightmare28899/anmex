@@ -1,4 +1,4 @@
-<div>
+{{-- <div>
       <!-- Navbar -->
       <!-- End Navbar -->
       <div class="container-fluid py-4">
@@ -812,3 +812,7 @@
 
   </script>
   @endpush
+ --}}
+ <div class="text-center my-5">
+    <h1>Bienvenido a AnMex</h1>
+ </div>
