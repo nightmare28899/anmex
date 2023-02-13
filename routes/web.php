@@ -20,7 +20,7 @@ use App\Http\Livewire\Choferes\Crud;
 use App\Http\Livewire\Autos\Crud as CrudAutos;
 use App\Http\Livewire\Clientes\Crud as CrudClientes;
 use App\Http\Livewire\Domicilios\Crud as CrudDomicilios;
-use App\Http\Livewire\guias\Crud as CrudGuias;
+use App\Http\Livewire\Guias\Crud as CrudGuias;
 use GuzzleHttp\Middleware;
 
 /*
