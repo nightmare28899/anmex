@@ -8,6 +8,9 @@ use App\Models\Clientes;
 use App\Models\DomiciliosE;
 use Carbon\Carbon;
 use Livewire\WithPagination;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class Crud extends Component
 {
@@ -139,6 +142,17 @@ class Crud extends Component
         $this->dispatchBrowserEvent('alert', [
             'message' => ($this->status == 'created') ? '¡Guía creada correctamente!' : '¡Guía actualizada correctamente!'
         ]);
+    }
+
+    public function verPDFMediaCarta()
+    {
+        $pdf = Pdf::loadView('livewire.guias.pdf-mediaCarta')
+            ->setPaper('A5', 'vertical')
+            ->output();
+
+        Storage::disk('public')->put('guiaMediaCarta.pdf', $pdf);
+
+        return Redirect::to('/view-pdf');
     }
 
     public function render()

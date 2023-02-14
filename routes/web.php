@@ -21,6 +21,7 @@ use App\Http\Livewire\Autos\Crud as CrudAutos;
 use App\Http\Livewire\Clientes\Crud as CrudClientes;
 use App\Http\Livewire\Domicilios\Crud as CrudDomicilios;
 use App\Http\Livewire\Guias\Crud as CrudGuias;
+use App\Http\Livewire\Guias\ViewPDF;
 use GuzzleHttp\Middleware;
 
 /*
@@ -64,4 +65,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('clientes', CrudClientes::class)->name('clientes');
     Route::get('domicilios', CrudDomicilios::class)->name('domicilios');
     Route::get('guias', CrudGuias::class)->name('guias');
+    Route::get('view-pdf', ViewPDF::class)->name('view-pdf');
 });

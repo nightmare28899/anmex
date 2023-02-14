@@ -184,6 +184,10 @@
                                 </td> --}}
                                 <td>
                                     <button type="button" class="btn bg-gradient-primary"
+                                        wire:click="verPDFMediaCarta">
+                                        PDF Media Carta
+                                    </button>
+                                    <button type="button" class="btn bg-gradient-primary"
                                         wire:click="edit({{ $guia->id }})" data-bs-toggle="modal"
                                         data-bs-target="#modal">
                                         Editar
