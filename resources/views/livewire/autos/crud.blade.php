@@ -60,7 +60,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" placeholder="Nombre del chofer"
                                         value="{{ $clienteBarraBuscadora ? $clienteBarraBuscadora['nombre'] : '' }}"
                                         disabled>
                                 </div>
@@ -144,6 +144,8 @@
                             <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
                                 Tarjeta de circulación</th>
                             <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
+                                Id Chofer</th>
+                            <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
                                 Chofer</th>
                             <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
                                 Acciones</th>
@@ -169,6 +171,9 @@
                                 </td>
                                 <td>
                                     {{ $auto->tarjeta_circulacion }}
+                                </td>
+                                <td>
+                                    {{ $auto->idChofer }}
                                 </td>
                                 <td>
                                     {{ $auto->nombre }}

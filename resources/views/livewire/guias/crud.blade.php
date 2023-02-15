@@ -10,7 +10,8 @@
         </div>
 
         <div class="input-group input-group-outline my-3 bg-white">
-            <input type="text" class="form-control" wire:model="search" placeholder="Coloca el estatus de entrega, id cliente o el id externo">
+            <input type="text" class="form-control" wire:model="search"
+                placeholder="Coloca el estatus de entrega, id cliente o el id externo">
         </div>
 
         <!-- Modal -->
@@ -61,9 +62,10 @@
                                         <label class="form-label">Id Externo*</label>
                                     @endif
                                     @if (!$guiaStatus)
-                                        <input type="text" class="form-control" wire:model.defer="id_externo">
+                                        <input type="text" class="form-control" wire:model="id_externo">
                                     @else
-                                        <input type="text" class="form-control" disabled>
+                                        <input type="text" class="form-control" wire:model="id_externo = ''"
+                                            disabled>
                                     @endif
                                 </div>
                             </div>
@@ -71,7 +73,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" placeholder="Nombre del cliente"
                                         value="{{ $clienteBarraBuscadora ? $clienteBarraBuscadora['nombre'] : '' }}"
                                         disabled>
                                 </div>
@@ -83,7 +85,7 @@
                                         @foreach ($domiciliosFound as $domicilio)
                                             <option value="{{ $domicilio->id }}">
                                                 {{ $domicilio->domicilio }}
-                                            </option> )
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -92,7 +94,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    <input type="text" class="form-control" value="Pendiente" disabled>
+                                    <input type="text" class="form-control" value="Estatus: Pendiente" disabled>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -142,7 +144,11 @@
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 ID Cliente</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
+                                Cliente</th>
+                            <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 ID Domicilio</th>
+                            <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
+                                Domicilio</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Estatus Entrega</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
@@ -168,7 +174,13 @@
                                     {{ $guia->id_cliente }}
                                 </td>
                                 <td>
+                                    {{ $guia->nombre }}
+                                </td>
+                                <td>
                                     {{ $guia->id_domicilio }}
+                                </td>
+                                <td>
+                                    {{ $guia->domicilio }}
                                 </td>
                                 <td>
                                     {{ $guia->estatus_entrega }}
@@ -183,10 +195,17 @@
                                     {{ $guia->status }}
                                 </td> --}}
                                 <td>
-                                    <button type="button" class="btn bg-gradient-primary"
-                                        wire:click="verPDFMediaCarta">
-                                        PDF Media Carta
-                                    </button>
+                                    @if ($guia->id_externo != null)
+                                        <button type="button" class="btn bg-gradient-primary"
+                                            wire:click="verPDFMediaCarta({{ $guia->id }})">
+                                            Ver PDF
+                                        </button>
+                                    @else
+                                        <button type="button" class="btn bg-gradient-primary"
+                                            wire:click="verGuiaPrepago({{ $guia->id }})">
+                                            Ver PDF
+                                        </button>
+                                    @endif
                                     <button type="button" class="btn bg-gradient-primary"
                                         wire:click="edit({{ $guia->id }})" data-bs-toggle="modal"
                                         data-bs-target="#modal">

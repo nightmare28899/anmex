@@ -8,9 +8,9 @@ use App\Models\Clientes;
 use App\Models\DomiciliosE;
 use Carbon\Carbon;
 use Livewire\WithPagination;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Crud extends Component
 {
@@ -102,12 +102,14 @@ class Crud extends Component
         $this->idGuia = $id;
         $this->editStatus = true;
         $guiaFound = Guias::find($id);
-        $this->id_externo = $guiaFound->id_externo;
         $this->clienteBarraBuscadora = Clientes::find($guiaFound->id_cliente);
         $guiaFound->guia_prepago != '' ? $this->guiaStatus = true : $this->guiaStatus = false;
+
         $this->guiaStatus == true ? $this->guia_prepago = $guiaFound->guia_prepago : $this->guia_prepago = '';
+        $this->guiaStatus == false ? $this->id_externo = $guiaFound->id_externo : $this->id_externo = '';
 
         $this->domiciliosFound = DomiciliosE::where('cliente_id', $this->clienteBarraBuscadora['id'])->get();
+        $this->id_domicilio = $guiaFound->id_domicilio;
     }
 
     public function delete($id)
@@ -144,13 +146,47 @@ class Crud extends Component
         ]);
     }
 
-    public function verPDFMediaCarta()
+    public function verGuiaPrepago($id)
     {
-        $pdf = Pdf::loadView('livewire.guias.pdf-mediaCarta')
-            ->setPaper('A5', 'vertical')
+        $guiaFound = Guias::find($id);
+        $clienteFound = Clientes::find($guiaFound->id_cliente);
+        $domicilioFound = DomiciliosE::find($guiaFound->id_domicilio);
+        $customPaper = array(0, 0, 289.133858268, 430.866141732);
+
+        $pdf = PDF::loadView(
+            'livewire.guias.pdf-mediaCarta',
+            [
+                'guia' => $guiaFound,
+                'cliente' => $clienteFound,
+                'domicilio' => $domicilioFound,
+            ]
+        )
+            ->setPaper($customPaper, 'vertical')
             ->output();
 
-        Storage::disk('public')->put('guiaMediaCarta.pdf', $pdf);
+        Storage::disk('public')->put('/guiaMediaCarta.pdf', $pdf);
+
+        return Redirect::to('/view-pdf');
+    }
+
+    public function verPDFMediaCarta($id)
+    {
+        $guiaFound = Guias::find($id);
+        $clienteFound = Clientes::find($guiaFound->id_cliente);
+        $domicilioFound = DomiciliosE::find($guiaFound->id_domicilio);
+
+        $pdf = PDF::loadView(
+            'livewire.guias.pdf-mediaCarta',
+            [
+                'guia' => $guiaFound,
+                'cliente' => $clienteFound,
+                'domicilio' => $domicilioFound,
+            ]
+        )
+            ->setPaper('A3', 'landscape')
+            ->output();
+
+        Storage::disk('public')->put('/guiaMediaCarta.pdf', $pdf);
 
         return Redirect::to('/view-pdf');
     }
@@ -158,13 +194,20 @@ class Crud extends Component
     public function render()
     {
         if ($this->search != '') {
-            $guia = Guias::where('estatus_entrega', $this->search)
+            $guia = Guias::join('domicilio_entregar', 'domicilio_entregar.id', 'guias.id_domicilio')
+                ->join('clientes', 'clientes.id', 'guias.id_cliente')
+                ->where('estatus_entrega', $this->search)
                 ->where('status', 'activo')
                 ->orWhere('id_cliente', $this->search)
                 ->orWhere('id_externo', $this->search)
+                ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'clientes.nombre')
                 ->paginate(10);
         } else {
-            $guia = Guias::where('status', 'activo')->paginate(10);
+            $guia = Guias::join('domicilio_entregar', 'domicilio_entregar.id', 'guias.id_domicilio')
+                ->join('clientes', 'clientes.id', 'guias.id_cliente')
+                ->where('status', 'activo')
+                ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'clientes.nombre')
+                ->paginate(10);
         }
 
         return view('livewire.guias.crud', [

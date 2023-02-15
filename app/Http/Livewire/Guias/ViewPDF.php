@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Guias;
 
-use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Component;
 
 class ViewPDF extends Component
 {
@@ -18,3 +18,4 @@ class ViewPDF extends Component
         ]);
     }
 }
+

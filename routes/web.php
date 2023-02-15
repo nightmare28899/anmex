@@ -22,6 +22,7 @@ use App\Http\Livewire\Clientes\Crud as CrudClientes;
 use App\Http\Livewire\Domicilios\Crud as CrudDomicilios;
 use App\Http\Livewire\Guias\Crud as CrudGuias;
 use App\Http\Livewire\Guias\ViewPDF;
+use App\Http\Livewire\Bitacora\View as ViewBitacora;
 use GuzzleHttp\Middleware;
 
 /*
@@ -66,4 +67,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('domicilios', CrudDomicilios::class)->name('domicilios');
     Route::get('guias', CrudGuias::class)->name('guias');
     Route::get('view-pdf', ViewPDF::class)->name('view-pdf');
+    Route::get('bitacora', ViewBitacora::class)->name('bitacora');
 });

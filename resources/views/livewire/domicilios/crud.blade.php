@@ -10,7 +10,8 @@
         </div>
 
         <div class="input-group input-group-outline my-3 bg-white">
-            <input type="text" class="form-control" wire:model="search" placeholder="Coloca el domicilio, codigo postal, telefono, observaciones o id">
+            <input type="text" class="form-control" wire:model="search"
+                placeholder="Coloca el domicilio, codigo postal, telefono, observaciones o id">
         </div>
 
         <!-- Modal -->
@@ -59,7 +60,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" placeholder="Nombre del cliente"
                                         value="{{ $clienteBarraBuscadora ? $clienteBarraBuscadora['nombre'] : '' }}"
                                         disabled>
                                 </div>
@@ -132,6 +133,8 @@
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Observaciones</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
+                                Id Cliente</th>
+                            <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Cliente</th>
                             <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
                                 Acciones</th>
@@ -157,6 +160,9 @@
                                 </td>
                                 <td>
                                     {{ $domicilio->cliente_id }}
+                                </td>
+                                <td>
+                                    {{ $domicilio->nombre }}
                                 </td>
                                 <td>
                                     <button type="button" class="btn bg-gradient-primary"

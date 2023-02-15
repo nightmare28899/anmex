@@ -132,6 +132,7 @@ class Crud extends Component
         $this->telefono = '';
         $this->observaciones = '';
         $this->cliente_id = '';
+        $this->clienteBarraBuscadora = null;
     }
 
     public function toast($status)
@@ -145,14 +146,16 @@ class Crud extends Component
     public function render()
     {
         if ($this->search != '') {
-            $domicilios = DomiciliosE::where('domicilio', 'like', '%' . $this->search . '%')
+            $domicilios = DomiciliosE::join('clientes', 'clientes.id', '=', 'domicilio_entregar.cliente_id')
+                ->where('domicilio', 'like', '%' . $this->search . '%')
                 ->orWhere('cp', $this->search)
                 ->orWhere('telefono', $this->search)
                 ->orWhere('observaciones', 'like', '%' . $this->search . '%')
                 ->orWhere('id', $this->search)
                 ->paginate(10);
         } else {
-            $domicilios = DomiciliosE::paginate(10);
+            $domicilios = DomiciliosE::join('clientes', 'clientes.id', '=', 'domicilio_entregar.cliente_id')
+                ->paginate(10);
         }
 
         return view('livewire.domicilios.crud', [
