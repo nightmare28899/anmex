@@ -146,7 +146,7 @@ class Crud extends Component
         ]);
     }
 
-    public function verGuiaPrepago($id)
+    public function verGuiaPrepago($id, $status = null)
     {
         $guiaFound = Guias::find($id);
         $clienteFound = Clientes::find($guiaFound->id_cliente);
@@ -159,6 +159,7 @@ class Crud extends Component
                 'guia' => $guiaFound,
                 'cliente' => $clienteFound,
                 'domicilio' => $domicilioFound,
+                'status' => $status,
             ]
         )
             ->setPaper($customPaper, 'vertical')
@@ -169,8 +170,8 @@ class Crud extends Component
         return Redirect::to('/view-pdf');
     }
 
-    public function verPDFMediaCarta($id)
-    {
+    public function verPDFMediaCarta($id, $status)
+    {   
         $guiaFound = Guias::find($id);
         $clienteFound = Clientes::find($guiaFound->id_cliente);
         $domicilioFound = DomiciliosE::find($guiaFound->id_domicilio);
@@ -181,6 +182,7 @@ class Crud extends Component
                 'guia' => $guiaFound,
                 'cliente' => $clienteFound,
                 'domicilio' => $domicilioFound,
+                'status' => $status,
             ]
         )
             ->setPaper('A3', 'landscape')

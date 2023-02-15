@@ -195,26 +195,36 @@
                                     {{ $guia->status }}
                                 </td> --}}
                                 <td>
-                                    @if ($guia->id_externo != null)
+                                    <div class="col-6">
+                                        @if ($guia->id_externo != null)
+                                            <?php $status = 0; ?>
+                                            <button type="button" class="btn bg-gradient-success"
+                                                wire:click="verPDFMediaCarta({{ $guia->id }}, {{ $status }})">
+                                                Comprobante
+                                            </button>
+                                        @else
+                                            <?php $status = 1; ?>
+                                            <button type="button" class="btn bg-gradient-success"
+                                                wire:click="verPDFMediaCarta({{ $guia->id }}, {{ $status }})">
+                                                Comprobante
+                                            </button>
+                                            <button type="button" class="btn bg-gradient-dark"
+                                                wire:click="verGuiaPrepago({{ $guia->id }}, {{ $status = null }})">
+                                                Etiqueta
+                                            </button>
+                                        @endif
+                                    </div>
+                                    <div class="col-6">
                                         <button type="button" class="btn bg-gradient-primary"
-                                            wire:click="verPDFMediaCarta({{ $guia->id }})">
-                                            Ver PDF
+                                            wire:click="edit({{ $guia->id }})" data-bs-toggle="modal"
+                                            data-bs-target="#modal">
+                                            Editar
                                         </button>
-                                    @else
-                                        <button type="button" class="btn bg-gradient-primary"
-                                            wire:click="verGuiaPrepago({{ $guia->id }})">
-                                            Ver PDF
+                                        <button type="button" class="btn bg-gradient-danger"
+                                            wire:click="delete({{ $guia->id }})">
+                                            Eliminar
                                         </button>
-                                    @endif
-                                    <button type="button" class="btn bg-gradient-primary"
-                                        wire:click="edit({{ $guia->id }})" data-bs-toggle="modal"
-                                        data-bs-target="#modal">
-                                        Editar
-                                    </button>
-                                    <button type="button" class="btn bg-gradient-danger"
-                                        wire:click="delete({{ $guia->id }})">
-                                        Eliminar
-                                    </button>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
