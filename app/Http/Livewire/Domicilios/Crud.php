@@ -152,9 +152,11 @@ class Crud extends Component
                 ->orWhere('telefono', $this->search)
                 ->orWhere('observaciones', 'like', '%' . $this->search . '%')
                 ->orWhere('id', $this->search)
+                ->select('domicilio_entregar.*', 'clientes.nombre')
                 ->paginate(10);
         } else {
             $domicilios = DomiciliosE::join('clientes', 'clientes.id', '=', 'domicilio_entregar.cliente_id')
+                ->select('domicilio_entregar.*', 'clientes.nombre')
                 ->paginate(10);
         }
 

@@ -1,7 +1,6 @@
 <div class="m-3">
     <div class="input-group input-group-outline my-3 bg-white">
-        <input type="text" class="form-control" wire:model="search"
-            placeholder="Escribe el Código Postal">
+        <input type="text" class="form-control" wire:model="search" placeholder="Escribe el Código Postal">
     </div>
 
     <div class="card mt-3">
@@ -9,12 +8,19 @@
             <table class="table align-items-center mb-0">
                 <thead>
                     <tr class="text-center">
-                        <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">Id</th>
-                        <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">Id externo</th>
-                        <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
-                            nombre</th>
+                        <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">
+                        </th>
                         <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
                             Código postal</th>
+                        <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
+                            Chofer</th>
+                        <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
+                            Firma de Recibido</th>
+                        <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
+                            Guias</th>
+                        {{-- <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">Id externo</th>
+                        <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
+                            nombre</th>
                         <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
                             Domicilio</th>
                         <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
@@ -22,23 +28,41 @@
                         <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
                             Guía prepago</th>
                         <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
-                            Fecha captura</th>
+                            Fecha captura</th> --}}
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($guias as $guia)
                         <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
                             <td>
-                                {{ $guia->id }}
+                                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center"
+                                    style="cursor: pointer;">
+                                    <i class="material-icons opacity-10 text-primary">attach_file</i>
+                                </div>
                             </td>
                             <td>
+                                {{ $guia->cp }}
+                            </td>
+                            <td>
+                                {{-- <select class="form-control text-center">
+                                    <option style="display: none;">Selecciona un chofer</option>
+                                    @foreach ($choferes as $chofer)
+                                        <option value="{{ $chofer->id }}">{{ $chofer->nombre }}</option>
+                                    @endforeach
+                                </select> --}}
+                            </td>
+                            <td>
+
+                            </td>
+                            <?php $guiasFunction = App\Http\Livewire\Bitacora\View::guiasQuantity($guia->cp); ?>
+                            <td>
+                                {{ $guiasFunction }}
+                            </td>
+                            {{-- <td>
                                 {{ $guia->id_externo }}
                             </td>
                             <td>
                                 {{ $guia->nombre }}
-                            </td>
-                            <td>
-                                {{ $guia->cp }}
                             </td>
                             <td>
                                 {{ $guia->domicilio }}
@@ -51,7 +75,7 @@
                             </td>
                             <td>
                                 {{ $guia->fecha_captura }}
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                 </tbody>

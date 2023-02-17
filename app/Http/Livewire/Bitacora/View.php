@@ -5,12 +5,24 @@ namespace App\Http\Livewire\Bitacora;
 use Livewire\Component;
 use App\Models\Guias;
 use Livewire\WithPagination;
+use App\Models\Choferes;
 
 class View extends Component
 {
     use WithPagination;
 
-    public $search = '';
+    public $search = '', $query = '';
+
+    public function guiasQuantity($cp)
+    {
+        $guias = Guias::join('domicilio_entregar', 'domicilio_entregar.id', 'guias.id_domicilio')
+            ->join('clientes', 'clientes.id', 'guias.id_cliente')
+            ->where('domicilio_entregar.cp', $cp)
+            ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'clientes.nombre')
+            ->get();
+
+        return $guias->count();
+    }
 
     public function render()
     {
@@ -27,6 +39,8 @@ class View extends Component
                 ->paginate(10);
         }
 
-        return view('livewire.bitacora.view', compact('guias'));
+        return view('livewire.bitacora.view', [
+            'choferes' => Choferes::all(),
+        ], compact('guias'));
     }
 }
