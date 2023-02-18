@@ -4,41 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {{-- <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets') }}/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="{{ asset('assets') }}/img/favicon.png"> --}}
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets') }}/img/logo-anmexcolor.png">
+    <link rel="icon" type="image/png" href="{{ asset('assets') }}/img/logo-anmexcolor.png">
     <title>
-        AnMex
+        ANMEX
     </title>
-
-    <!-- Metas -->
-    @if (env('IS_DEMO'))
-        <meta name="keywords"
-            content="creative tim, updivision, material, html dashboard, laravel, livewire, laravel livewire, alpine.js, html css dashboard laravel, material dashboard laravel, livewire material dashboard, material admin, livewire dashboard, livewire admin, web dashboard, bootstrap 5 dashboard laravel, bootstrap 5, css3 dashboard, bootstrap 5 admin laravel, material dashboard bootstrap 5 laravel, frontend, responsive bootstrap 5 dashboard, material dashboard, material laravel bootstrap 5 dashboard" />
-        <meta name="description"
-            content="Dozens of handcrafted UI components, Laravel authentication, register & profile editing, Livewire & Alpine.js" />
-        <meta itemprop="name" content="Material Dashboard 2 Laravel Livewire by Creative Tim & UPDIVISION" />
-        <meta itemprop="description"
-            content="Dozens of handcrafted UI components, Laravel authentication, register & profile editing, Livewire & Alpine.js" />
-        <meta itemprop="image"
-            content="https://s3.amazonaws.com/creativetim_bucket/products/600/original/material-dashboard-laravel-livewire.jpg" />
-        <meta name="twitter:card" content="product" />
-        <meta name="twitter:site" content="@creativetim" />
-        <meta name="twitter:title" content="Material Dashboard 2 Laravel Livewire by Creative Tim & UPDIVISION" />
-        <meta name="twitter:description"
-            content="Dozens of handcrafted UI components, Laravel authentication, register & profile editing, Livewire & Alpine.js" />
-        <meta name="twitter:creator" content="@creativetim" />
-        <meta name="twitter:image"
-            content="https://s3.amazonaws.com/creativetim_bucket/products/600/original/material-dashboard-laravel-livewire.jpg" />
-        <meta property="fb:app_id" content="655968634437471" />
-        <meta property="og:title" content="Material Dashboard 2 Laravel Livewire by Creative Tim & UPDIVISION" />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://www.creative-tim.com/live/material-dashboard-laravel-livewire" />
-        <meta property="og:image"
-            content="https://s3.amazonaws.com/creativetim_bucket/products/600/original/material-dashboard-laravel-livewire.jpg" />
-        <meta property="og:description"
-            content="Dozens of handcrafted UI components, Laravel authentication, register & profile editing, Livewire & Alpine.js" />
-        <meta property="og:site_name" content="Creative Tim" />
-    @endif
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css"
         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
@@ -51,6 +21,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets') }}/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+    <link href="{{ asset('css') }}/app.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     @livewireStyles
@@ -93,6 +64,8 @@
                 case '¡Cliente creado correctamente!':
                 case '¡Domicilio de entrega creado correctamente!':
                 case '¡Guía creada correctamente!':
+                case '¡PDF Generado correctamente!':
+                case '¡Chofer agregado!':
                     toastr.success(event.detail.message, '¡Exito!');
                     break;
                 case '¡Chofer eliminado correctamente!':
@@ -101,6 +74,7 @@
                 case '¡Domicilio de entrega eliminado correctamente!':
                 case '¡Guía eliminada correctamente!':
                 case '¡Todos los campos son requeridos!':
+                case '¡No se ha seleccionado ninguna guía!':
                     toastr.error(event.detail.message, '¡Alerta!');
                     break;
                     toastr.warning(event.detail.message, '¡Alerta!');
@@ -110,6 +84,7 @@
                 case '¡Cliente actualizado correctamente!':
                 case '¡Domicilio de entrega actualizado correctamente!':
                 case '¡Guía actualizada correctamente!':
+                case '¡Estatus actualizado correctamente!':
                     toastr.info(event.detail.message, '¡Actualizado!');
                     break;
                 default:

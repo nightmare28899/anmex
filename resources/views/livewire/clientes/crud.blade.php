@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn bg-gradient-dark" data-bs-dismiss="modal">Cerrar</button>
+                        {{-- <button type="button" class="btn bg-gradient-dark" data-bs-dismiss="modal">Cerrar</button> --}}
                         @if ($editStatus)
                             <button type="button" class="btn bg-gradient-primary" wire:click="update">Actualizar
                                 Registro</button>

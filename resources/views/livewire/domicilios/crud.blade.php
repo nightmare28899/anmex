@@ -47,7 +47,7 @@
 
                                                 @foreach ($clientesBuscados as $i => $buscado)
                                                     <div wire:click="selectContact({{ $i }})"
-                                                        class="list-item list-none p-2 hover:text-white rounded-md  hover:bg-blue-600 cursor-pointer">
+                                                        class="list-item list-none p-2 rounded-md cursor-pointer search">
                                                         {{ $buscado['nombre'] }}
                                                     </div>
                                                 @endforeach
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn bg-gradient-dark" data-bs-dismiss="modal">Cerrar</button>
+                        {{-- <button type="button" class="btn bg-gradient-dark" data-bs-dismiss="modal">Cerrar</button> --}}
                         @if ($editStatus)
                             <button type="button" class="btn bg-gradient-primary" wire:click="update">Actualizar
                                 Registro</button>

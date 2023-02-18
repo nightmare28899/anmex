@@ -45,7 +45,7 @@
 
                                                 @foreach ($clientesBuscados as $i => $buscado)
                                                     <div wire:click="selectContact({{ $i }})"
-                                                        class="absolute list-item list-none p-2 hover:text-white rounded-md  hover:bg-blue-600 cursor-pointer">
+                                                        class="absolute list-item list-none p-2 rounded-md cursor-pointer search">
                                                         {{ $buscado['nombre'] }}
                                                     </div>
                                                 @endforeach
@@ -120,7 +120,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn bg-gradient-dark" data-bs-dismiss="modal">Cerrar</button>
+                        {{-- <button type="button" class="btn bg-gradient-dark" data-bs-dismiss="modal">Cerrar</button> --}}
                         @if ($editStatus)
                             <button type="button" class="btn bg-gradient-primary" wire:click="update">Actualizar
                                 Registro</button>
@@ -138,7 +138,7 @@
                 <table class="table align-items-center mb-0">
                     <thead>
                         <tr class="text-center">
-                            <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">Id</th>
+                            <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7">Id</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 ID Externo</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
@@ -155,9 +155,7 @@
                                 Captura Fecha</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Guía Prepago</th>
-                            {{-- <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
-                                Estatus</th> --}}
-                            <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
+                            <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Acciones</th>
                         </tr>
                     </thead>
@@ -191,9 +189,6 @@
                                 <td>
                                     {{ $guia->guia_prepago }}
                                 </td>
-                                {{-- <td>
-                                    {{ $guia->status }}
-                                </td> --}}
                                 <td>
                                     <div class="col-6">
                                         @if ($guia->id_externo != null)
