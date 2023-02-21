@@ -199,10 +199,10 @@
                                             </button>
                                         @else
                                             <?php $status = 1; ?>
-                                            <button type="button" class="btn bg-gradient-success"
+                                            {{-- <button type="button" class="btn bg-gradient-success"
                                                 wire:click="verPDFMediaCarta({{ $guia->id }}, {{ $status }})">
                                                 Comprobante
-                                            </button>
+                                            </button> --}}
                                             <button type="button" class="btn bg-gradient-dark"
                                                 wire:click="verGuiaPrepago({{ $guia->id }}, {{ $status = null }})">
                                                 Etiqueta

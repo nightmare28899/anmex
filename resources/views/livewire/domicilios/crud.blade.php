@@ -70,9 +70,9 @@
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
                                     @if (!$editStatus)
-                                        <label class="form-label">Domicilio*</label>
+                                        <label class="form-label">Telefono*</label>
                                     @endif
-                                    <input type="text" class="form-control" required wire:model.defer="domicilio">
+                                    <input type="text" class="form-control" required wire:model.defer="telefono">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -87,19 +87,19 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    @if (!$editStatus)
-                                        <label class="form-label">Telefono*</label>
-                                    @endif
-                                    <input type="text" class="form-control" required wire:model.defer="telefono">
+                                    {{-- @if (!$editStatus)
+                                        <label class="form-label">Domicilio*</label>
+                                    @endif --}}
+                                    <textarea type="text" class="form-control" required wire:model.defer="domicilio" placeholder="Coloca el domicilio"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    @if (!$editStatus)
+                                    {{-- @if (!$editStatus)
                                         <label class="form-label">Observaciones*</label>
-                                    @endif
-                                    <input type="text" class="form-control" required
-                                        wire:model.defer="observaciones">
+                                    @endif --}}
+                                    <textarea type="text" class="form-control" required wire:model.defer="observaciones"
+                                        placeholder="Coloca las observaciones"></textarea>
                                 </div>
                             </div>
                         </div>

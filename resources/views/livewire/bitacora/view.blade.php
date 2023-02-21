@@ -80,9 +80,27 @@
     </div>
 
     @if (!$showFilterCp)
-        <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modal">
-            Agregar Chofer
-        </button>
+        <div class="d-flex col-7 mx-auto">
+            <div class="col mt-4">
+                <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modal">
+                    Agregar Chofer
+                </button>
+            </div>
+            <div class="input-group input-group-static my-3 mx-6 col">
+                <label>Fecha Inicio</label>
+                <input type="date" class="form-control" wire:model="from">
+            </div>
+            &nbsp;
+            <div class="input-group input-group-static my-3 mx-6 col">
+                <label>Fecha Fin</label>
+                <input type="date" class="form-control" wire:model="to">
+            </div>
+            <div class="col">
+                <button type="button" class="btn bg-gradient-primary mt-4" wire:click="removeDates">
+                    Resetear
+                </button>
+            </div>
+        </div>
         <div class="float-end">
             <button type="button" class="btn bg-gradient-primary" wire:click="showPDFCp">
                 Generar PDF
@@ -112,9 +130,7 @@
                                 </td>
                                 <?php $dataChofer = App\Http\Livewire\Bitacora\View::dataChofer($guia->cp); ?>
                                 <td>
-                                    @if ($cpText)
-                                        {{ $dataChofer }}
-                                    @endif
+                                    {{ $dataChofer }}
                                 </td>
                                 <td>
                                 </td>
@@ -143,23 +159,6 @@
             <button type="button" class="btn bg-gradient-danger" wire:click="selectAll">
                 {{ !$marked ? __('Marcar todos') : __('Desmarcar todos') }}
             </button>
-        </div>
-
-        <div class="d-flex col-4 mx-auto">
-            <div class="input-group input-group-static my-3 col">
-                <label>Fecha Inicio</label>
-                <input type="date" class="form-control" wire:model="from">
-            </div>
-            &nbsp;
-            <div class="input-group input-group-static my-3 mx-6 col">
-                <label>Fecha Fin</label>
-                <input type="date" class="form-control" wire:model="to">
-            </div>
-            <div class="col">
-                <button type="button" class="btn bg-gradient-primary mt-4" wire:click="removeDates">
-                    Resetear
-                </button>
-            </div>
         </div>
 
         <div class="card mt-3 col-12">

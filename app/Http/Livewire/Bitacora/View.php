@@ -18,7 +18,7 @@ class View extends Component
 
     public $search = '', $showFilterCp = false, $postalCodeSend, $selected = [], $status = 'created', $marked = false, $from, $to, $guidePDF = false, $date, $cpPDF = false, $arrayCp = [], $choferSelected = [], $editStatus = false;
 
-    public $query = '', $clientesBuscados = [], $clienteBarraBuscadora = null, $cpList = [], $cpSelected = '', $finalArray = [], $cpText;
+    public $query = '', $clientesBuscados = [], $clienteBarraBuscadora = null, $cpList = [], $cpSelected = '', $finalArray = [], $cpText, $arrayCpNames = [];
 
     public function mount()
     {
@@ -53,8 +53,10 @@ class View extends Component
     public function dataChofer($cp)
     {
         if ($this->cpText) {
-            for ($i = 0; $i < count($this->finalArray); $i++) {
-                return isset($this->finalArray[$i][$cp]) == true ? $this->finalArray[$i][$cp] : '';
+            foreach ($this->finalArray as $key => $value) {
+                if (isset($value[$cp])) {
+                    return $value[$cp];
+                }
             }
         }
     }
@@ -62,8 +64,11 @@ class View extends Component
     public function store()
     {
         if ($this->cpText) {
-            array_push($this->finalArray, [$this->cpText => $this->clienteBarraBuscadora['nombre']]);
-            
+            array_push(
+                $this->finalArray,
+                [$this->cpText => $this->clienteBarraBuscadora['nombre']],
+            );
+
             $this->dispatchBrowserEvent('close-modal');
             $this->status = 'created';
             $this->dispatchBrowserEvent('alert', [
@@ -87,6 +92,7 @@ class View extends Component
         for ($i = 0; $i < count($data); $i++) {
             $this->postalCodeSend = $data[$i]->cp;
             array_push($this->arrayCp, $this->guiasQuantity($this->postalCodeSend));
+            array_push($this->arrayCpNames, $this->dataChofer($this->postalCodeSend));
         }
 
         $pdf = PDF::loadView(
@@ -96,7 +102,7 @@ class View extends Component
                 'dateNow' => $this->date,
                 'postalCode' => $this->postalCodeSend,
                 'quantity' => $this->arrayCp,
-                'chofer' => $this->finalArray
+                'chofer' => $this->arrayCpNames,
             ]
         )
             ->setPaper('A5', 'landscape')
@@ -251,7 +257,11 @@ class View extends Component
         if ($this->showFilterCp) {
             $guias = $this->getGuides($this->postalCodeSend);
         } else {
-            $guias = DomiciliosE::select('cp')->groupBy('cp')->paginate(10);
+            if ($this->from && $this->to) {
+                $guias = DomiciliosE::select('cp')->whereBetween('domicilio_entregar.created_at', [$this->from, $this->to])->groupBy('cp')->paginate(10);
+            } else {
+                $guias = DomiciliosE::select('cp')->groupBy('cp')->paginate(10);
+            }
 
             if ($this->cpPDF) {
                 $this->showFirstPDF($guias);

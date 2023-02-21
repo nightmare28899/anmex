@@ -62,7 +62,7 @@
                         {{ $guia->cp }}
                     </td>
                     <td>
-                        {{ isset($chofer[$key][$guia->cp]) == true ? $chofer[$key][$guia->cp] : '' }}
+                        {{ $chofer[$key] }}
                     </td>
                     <td>
                     </td>
