@@ -67,7 +67,7 @@ class Crud extends Component
                 'id_domicilio' => $this->id_domicilio,
                 'estatus_entrega' => 'Pendiente',
                 'guia_prepago' => $this->guia_prepago,
-                'fecha_captura' => Carbon::now()->format('d/m/Y'),
+                'fecha_entrega' => 'Pendiente',
                 'status' => 'activo',
             ]);
 
@@ -171,7 +171,7 @@ class Crud extends Component
     }
 
     public function verPDFMediaCarta($id, $status)
-    {   
+    {
         $guiaFound = Guias::find($id);
         $clienteFound = Clientes::find($guiaFound->id_cliente);
         $domicilioFound = DomiciliosE::find($guiaFound->id_domicilio);

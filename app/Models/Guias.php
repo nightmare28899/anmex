@@ -17,7 +17,7 @@ class Guias extends Model
         'id_externo',
         'id_domicilio',
         'estatus_entrega',
-        'fecha_captura',
+        'fecha_entrega',
         'guia_prepago',
         'status',
     ];

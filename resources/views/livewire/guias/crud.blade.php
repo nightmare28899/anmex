@@ -58,24 +58,24 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    @if (!$editStatus)
-                                        <label class="form-label">Id Externo*</label>
-                                    @endif
-                                    @if (!$guiaStatus)
-                                        <input type="text" class="form-control" wire:model="id_externo">
-                                    @else
-                                        <input type="text" class="form-control" wire:model="id_externo = ''"
-                                            disabled>
-                                    @endif
+                                    <input type="text" class="form-control" placeholder="Nombre del cliente"
+                                        value="{{ $clienteBarraBuscadora ? $clienteBarraBuscadora['nombre'] : '' }}"
+                                        disabled>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    <input type="text" class="form-control" placeholder="Nombre del cliente"
-                                        value="{{ $clienteBarraBuscadora ? $clienteBarraBuscadora['nombre'] : '' }}"
-                                        disabled>
+                                    {{-- @if (!$editStatus)
+                                        <label class="form-label">Id Externo*</label>
+                                    @endif --}}
+                                    @if (!$guiaStatus)
+                                        <input type="text" class="form-control" wire:model.defer="id_externo" placeholder="Id Externo">
+                                    @else
+                                        <input type="text" class="form-control" wire:model="id_externo = ''"
+                                            disabled>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -152,7 +152,7 @@
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Estatus Entrega</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
-                                Captura Fecha</th>
+                                Fecha Captura</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Guía Prepago</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
@@ -184,7 +184,7 @@
                                     {{ $guia->estatus_entrega }}
                                 </td>
                                 <td>
-                                    {{ $guia->fecha_captura }}
+                                    {{ $guia->created_at }}
                                 </td>
                                 <td>
                                     {{ $guia->guia_prepago }}
@@ -193,16 +193,20 @@
                                     <div class="col-6">
                                         @if ($guia->id_externo != null)
                                             <?php $status = 0; ?>
-                                            <button type="button" class="btn bg-gradient-success"
-                                                wire:click="verPDFMediaCarta({{ $guia->id }}, {{ $status }})">
-                                                Comprobante
-                                            </button>
-                                        @else
-                                            <?php $status = 1; ?>
                                             {{-- <button type="button" class="btn bg-gradient-success"
                                                 wire:click="verPDFMediaCarta({{ $guia->id }}, {{ $status }})">
                                                 Comprobante
                                             </button> --}}
+                                            <button type="button" class="btn bg-gradient-dark"
+                                                wire:click="verGuiaPrepago({{ $guia->id }}, {{ $status = null }})">
+                                                Etiqueta
+                                            </button>
+                                        @else
+                                            <?php $status = 1; ?>
+                                            <button type="button" class="btn bg-gradient-success"
+                                                wire:click="verPDFMediaCarta({{ $guia->id }}, {{ $status }})">
+                                                Comprobante
+                                            </button>
                                             <button type="button" class="btn bg-gradient-dark"
                                                 wire:click="verGuiaPrepago({{ $guia->id }}, {{ $status = null }})">
                                                 Etiqueta

@@ -23,6 +23,8 @@ class View extends Component
     public function mount()
     {
         $this->resetear();
+
+        $this->from = Carbon::now()->format('Y-m-d');
     }
 
     public function resetear()
@@ -171,8 +173,11 @@ class View extends Component
 
                 if ($guia->estatus_entrega == 'Entregado') {
                     $guia->estatus_entrega = 'Pendiente';
+                    $guia->fecha_entrega = 'Pendiente';
                 } else {
                     $guia->estatus_entrega = 'Entregado';
+                    $guia->fecha_entrega = Carbon::now()->format('d/m/Y');
+
                 }
 
                 $guia->save();
@@ -196,11 +201,11 @@ class View extends Component
         $this->showFilterCp = true;
         $this->postalCodeSend = $cp;
 
-        if ($this->from && $this->to) {
+        if ($this->from) {
             $guias = Guias::join('domicilio_entregar', 'domicilio_entregar.id', 'guias.id_domicilio')
                 ->join('clientes', 'clientes.id', 'guias.id_cliente')
                 ->where('domicilio_entregar.cp', $cp)
-                ->whereBetween('guias.created_at', [$this->from, $this->to])
+                ->whereDate('guias.created_at', $this->from)
                 ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'clientes.nombre')
                 ->paginate(10);
 
@@ -257,11 +262,7 @@ class View extends Component
         if ($this->showFilterCp) {
             $guias = $this->getGuides($this->postalCodeSend);
         } else {
-            if ($this->from && $this->to) {
-                $guias = DomiciliosE::select('cp')->whereBetween('domicilio_entregar.created_at', [$this->from, $this->to])->groupBy('cp')->paginate(10);
-            } else {
-                $guias = DomiciliosE::select('cp')->groupBy('cp')->paginate(10);
-            }
+            $guias = DomiciliosE::select('cp')->whereDate('domicilio_entregar.created_at', $this->from)->groupBy('cp')->paginate(10);
 
             if ($this->cpPDF) {
                 $this->showFirstPDF($guias);

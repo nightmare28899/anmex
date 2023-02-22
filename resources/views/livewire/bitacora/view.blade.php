@@ -87,14 +87,14 @@
                 </button>
             </div>
             <div class="input-group input-group-static my-3 mx-6 col">
-                <label>Fecha Inicio</label>
+                <label>Selecciona la Fecha</label>
                 <input type="date" class="form-control" wire:model="from">
             </div>
-            &nbsp;
+            {{-- &nbsp;
             <div class="input-group input-group-static my-3 mx-6 col">
                 <label>Fecha Fin</label>
                 <input type="date" class="form-control" wire:model="to">
-            </div>
+            </div> --}}
             <div class="col">
                 <button type="button" class="btn bg-gradient-primary mt-4" wire:click="removeDates">
                     Resetear
@@ -183,6 +183,7 @@
                     </thead>
                     <tbody>
                         @foreach ($guias as $guia)
+                            @if ($guia->estatus_entrega != 'Entregado' && $guia->status != 'inactivo')
                             <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
                                 <td>
                                     <input type="checkbox" wire:model="selected" value="{{ $guia->id }}">
@@ -206,9 +207,10 @@
                                     {{ $guia->guia_prepago }}
                                 </td>
                                 <td>
-                                    {{ $guia->fecha_captura }}
+                                    {{ $guia->created_at }}
                                 </td>
                             </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
