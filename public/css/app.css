@@ -1,0 +1,19 @@
+.search:hover {
+    background-color: rgba(248, 45, 106, 0.945);
+    color: white;
+    border-radius: 5px;
+}
+
+.inputSearch {
+    width: 14rem;
+    z-index: 99999 !important;
+    top: 8px;
+    left: 7rem;
+    background: white;
+    border: 1px solid #d7d0d0;
+    border-radius: 7px;
+}
+
+.modal-open {
+    overflow: hidden !important;
+}
