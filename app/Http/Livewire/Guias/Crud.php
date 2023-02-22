@@ -62,11 +62,11 @@ class Crud extends Component
             ]);
         } else {
             Guias::create([
-                'id_externo' => $this->guiaStatus == false ? $this->id_externo : '-',
+                'id_externo' => $this->id_externo,
                 'id_cliente' => $this->clienteBarraBuscadora['id'],
                 'id_domicilio' => $this->id_domicilio,
                 'estatus_entrega' => 'Pendiente',
-                'guia_prepago' => $this->guia_prepago == true ? $this->guia_prepago : '-',
+                'guia_prepago' => $this->guia_prepago,
                 'fecha_entrega' => 'Pendiente',
                 'status' => 'activo',
             ]);
