@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Guias;
 use App\Models\Clientes;
 use App\Models\DomiciliosE;
+use App\Models\Bitacora;
 use Carbon\Carbon;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Redirect;
@@ -110,6 +111,12 @@ class Crud extends Component
                 'fechaActual' => Carbon::now()->format('d/m/Y'),
             ]);
 
+            $bitacoraFound = Bitacora::where('cp', $this->cp)->whereDate('created_at', '=', now())->get();
+            if ($bitacoraFound->count() == 0) {
+                Bitacora::create([
+                    'cp' => $this->cp,
+                ]);
+            }
 
             $this->status = 'created';
             $this->toast($this->status);
