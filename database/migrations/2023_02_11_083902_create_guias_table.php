@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('estatus_entrega');
             $table->string('fecha_captura');
             $table->string('guia_prepago')->nullable();
+            $table->string('id_chofer')->nullable();
             $table->timestamps();
         });
     }

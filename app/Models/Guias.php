@@ -20,5 +20,6 @@ class Guias extends Model
         'fecha_entrega',
         'guia_prepago',
         'status',
+        'id_chofer',
     ];
 }

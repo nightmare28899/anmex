@@ -76,6 +76,7 @@
                 case '¡Guía inactiva correctamente!':
                 case '¡Todos los campos son requeridos!':
                 case '¡No se ha seleccionado ninguna guía!':
+                case '¡Falta el domicilio!':
                     toastr.error(event.detail.message, '¡Alerta!');
                     break;
                     toastr.warning(event.detail.message, '¡Alerta!');
@@ -98,6 +99,7 @@
         window.addEventListener('close-modal', event => {
             $('#modal').modal('hide');
             $('#modalDelete').modal('hide');
+            $('#modalClient').modal('hide');
         });
     </script>
 </body>

@@ -184,7 +184,7 @@
                     </thead>
                     <tbody>
                         @foreach ($guias as $guia)
-                            @if ($guia->estatus_entrega != 'Entregado' && $guia->status != 'inactivo')
+                            {{-- @if ($guia->estatus_entrega != 'Entregado' && $guia->status != 'inactivo') --}}
                                 <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
                                     <td>
                                         <input type="checkbox" wire:model="selected" value="{{ $guia->id }}">
@@ -211,7 +211,7 @@
                                         {{ $guia->created_at }}
                                     </td>
                                 </tr>
-                            @endif
+                            {{-- @endif --}}
                         @endforeach
                     </tbody>
                 </table>

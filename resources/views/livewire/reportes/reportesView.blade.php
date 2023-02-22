@@ -45,6 +45,10 @@
                         <th>
                             Cliente</th>
                         <th>
+                            ID Chofer</th>
+                        <th>
+                            Chofer</th>
+                        <th>
                             Domicilio</th>
                         <th>
                             Estatus Entrega</th>
@@ -52,8 +56,6 @@
                             Guía Prepago</th>
                         <th>
                             Fecha Entrega</th>
-                        <th>
-                            Fecha Captura</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,6 +77,12 @@
                                 {{ $bitacora->nombre }}
                             </td>
                             <td>
+                                {{ $bitacora->id_chofer }}
+                            </td>
+                            <td>
+                                {{ $bitacora->choferName }}
+                            </td>
+                            <td>
                                 {{ $bitacora->domicilio }}
                             </td>
                             <td>
@@ -85,9 +93,6 @@
                             </td>
                             <td>
                                 {{ $bitacora->fecha_entrega }}
-                            </td>
-                            <td>
-                                {{ $bitacora->created_at }}
                             </td>
                         </tr>
                     @endforeach

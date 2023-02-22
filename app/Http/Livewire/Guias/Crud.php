@@ -18,7 +18,17 @@ class Crud extends Component
 
     public $id_externo, $id_cliente, $id_domicilio, $estatus_entrega = 'Pendiente', $guia_prepago, $guiaStatus = false, $status = 'created', $editStatus = false, $guiaFound, $search = "", $domiciliosFound = [], $idGuia, $idGuiaDelete;
 
-    public $query = '', $clientesBuscados = [], $clienteBarraBuscadora = null;
+    public $query = '', $clientesBuscados = [], $clienteBarraBuscadora = null, $queryDom = '', $domiciliosBuscados = [], $domicilioBarraBuscadora = null, $domicilioTextArea = '';
+
+    public $nombre, $telefono, $cp, $domicilio, $observaciones;
+
+    public $rules = [
+        'nombre' => 'required',
+        'telefono' => 'required',
+        'cp' => 'required',
+        'domicilio' => 'required',
+        'observaciones' => 'required',
+    ];
 
     public function mount()
     {
@@ -29,6 +39,8 @@ class Crud extends Component
     {
         $this->query = '';
         $this->clientesBuscados = [];
+        $this->queryDom = '';
+        $this->domiciliosBuscados = [];
     }
 
     public function selectContact($pos)
@@ -37,6 +49,16 @@ class Crud extends Component
         if ($this->clienteBarraBuscadora) {
             $this->clienteBarraBuscadora;
             $this->domiciliosFound = DomiciliosE::where('cliente_id', $this->clienteBarraBuscadora['id'])->get();
+            $this->resetear();
+        }
+    }
+
+    public function selectDomicilio($pos)
+    {
+        $this->domicilioBarraBuscadora = $this->domiciliosBuscados[$pos] ?? null;
+        if ($this->domicilioBarraBuscadora) {
+            $this->domicilioBarraBuscadora;
+            $this->domicilioTextArea = $this->domicilioBarraBuscadora['domicilio'];
             $this->resetear();
         }
     }
@@ -51,28 +73,75 @@ class Crud extends Component
         }
     }
 
-    public function store()
+    public function updatedQueryDom()
     {
-        $this->editStatus = false;
+        if ($this->queryDom != '' && $this->clienteBarraBuscadora) {
+            $this->domiciliosBuscados = DomiciliosE::where('cliente_id', $this->clienteBarraBuscadora['id'])->where('domicilio', 'like', '%' . $this->queryDom . '%')
+                ->limit(6)
+                ->get()
+                ->toArray();
+        }
+    }
 
-        if ($this->id_domicilio == '') {
+    public function createCliente()
+    {
+        if ($this->nombre == '' || $this->telefono == '' || $this->cp == '' || $this->domicilio == '' || $this->observaciones == '') {
             $this->status = 'error';
             $this->dispatchBrowserEvent('alert', [
                 'message' => '¡Todos los campos son requeridos!'
             ]);
+
+            $this->rules;
+            $this->validate();
+        } else {
+            Clientes::create([
+                'nombre' => $this->nombre,
+                'fechaActual' => Carbon::now()->format('d/m/Y'),
+            ]);
+
+            $clienteId = Clientes::where('nombre', $this->nombre)->latest()->first();
+
+            DomiciliosE::create([
+                'cliente_id' => $clienteId->id,
+                'domicilio' => $this->domicilio,
+                'cp' => $this->cp,
+                'telefono' => $this->telefono,
+                'observaciones' => $this->observaciones,
+                'fechaActual' => Carbon::now()->format('d/m/Y'),
+            ]);
+
+
+            $this->status = 'created';
+            $this->toast($this->status);
+            $this->dispatchBrowserEvent('close-modal');
+            $this->resetInputs();
+        }
+    }
+
+    public function store()
+    {
+        $this->editStatus = false;
+
+        if ($this->domicilioBarraBuscadora == null) {
+            $this->status = 'error';
+            $this->dispatchBrowserEvent('alert', [
+                'message' => '¡Falta el domicilio!'
+            ]);
         } else {
             Guias::create([
-                'id_externo' => $this->id_externo,
+                'id_externo' => $this->guiaStatus == false ? $this->id_externo : '',
                 'id_cliente' => $this->clienteBarraBuscadora['id'],
-                'id_domicilio' => $this->id_domicilio,
+                'id_domicilio' => $this->domicilioBarraBuscadora['id'],
                 'estatus_entrega' => 'Pendiente',
-                'guia_prepago' => $this->guia_prepago,
+                'guia_prepago' => $this->guiaStatus == true ? $this->guia_prepago : '',
                 'fecha_entrega' => 'Pendiente',
                 'status' => 'activo',
             ]);
 
             $this->status = 'created';
-            $this->toast($this->status);
+            $this->dispatchBrowserEvent('alert', [
+                'message' => ($this->status == 'created') ? 'Cliente creado correctamente!' : 'Cliente actualizado correctamente!'
+            ]);
             $this->dispatchBrowserEvent('close-modal');
             $this->resetInputs();
         }
@@ -86,7 +155,7 @@ class Crud extends Component
         $guiasFound->update([
             'id_externo' => $this->id_externo,
             'id_cliente' => $this->clienteBarraBuscadora['id'],
-            'id_domicilio' => $this->id_domicilio,
+            'id_domicilio' => $this->domicilioBarraBuscadora['id'],
             'estatus_entrega' => 'Pendiente',
             'guia_prepago' => $this->guia_prepago,
         ]);
@@ -109,7 +178,8 @@ class Crud extends Component
         $this->guiaStatus == false ? $this->id_externo = $guiaFound->id_externo : $this->id_externo = '';
 
         $this->domiciliosFound = DomiciliosE::where('cliente_id', $this->clienteBarraBuscadora['id'])->get();
-        $this->id_domicilio = $guiaFound->id_domicilio;
+        $this->domicilioBarraBuscadora = DomiciliosE::find($guiaFound->id_domicilio);
+        $this->domicilioTextArea = $this->domicilioBarraBuscadora['domicilio'];
     }
 
     public function showWarningMessage($id)
@@ -142,7 +212,14 @@ class Crud extends Component
         $this->guia_prepago = '';
         $this->guiaStatus = false;
         $this->clienteBarraBuscadora = null;
-        $this->domiciliosFound = [];
+        $this->domicilioBarraBuscadora = null;
+        $this->domicilioTextArea = '';
+
+        $this->nombre = '';
+        $this->domicilio = '';
+        $this->telefono = '';
+        $this->cp = '';
+        $this->observaciones = '';
     }
 
     public function toast($status)

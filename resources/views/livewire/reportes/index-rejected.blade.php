@@ -1,9 +1,18 @@
 <div class="mx-3">
 
-    <div class="d-flex col-6 mx-auto">
+    <div class="d-flex col-8 mx-auto">
         <div class="input-group input-group-static my-3 mx-6 col">
             <label>Selecciona una Fecha</label>
             <input type="date" class="form-control" wire:model="from">
+        </div>
+        <div class="my-3 mx-6 col-2">
+            <select class="form-control" wire:model="choferSelected"
+                style="border: 0.5px solid rgb(102, 102, 102); padding: 6px;">
+                <option value='vacio'>Selecciona un chofer</option>
+                @foreach ($choferes as $chofer)
+                    <option value="{{ $chofer->id }}">{{ $chofer->nombre }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="my-3 mx-6 col">
             <button type="button" class="btn bg-gradient-primary" wire:click="verPDF">
@@ -27,6 +36,10 @@
                             ID Cliente</th>
                         <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                             Cliente</th>
+                        <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
+                            ID Chofer</th>
+                        <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
+                            Chofer</th>
                         <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                             Domicilio</th>
                         <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
@@ -54,6 +67,12 @@
                             </td>
                             <td>
                                 {{ $bitacora->nombre }}
+                            </td>
+                            <td>
+                                {{ $bitacora->id_chofer }}
+                            </td>
+                            <td>
+                                {{ $bitacora->choferName }}
                             </td>
                             <td>
                                 {{ $bitacora->domicilio }}

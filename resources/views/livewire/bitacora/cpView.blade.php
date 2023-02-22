@@ -53,6 +53,8 @@
                     Firma de Recibido</th>
                 <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
                     Guias</th>
+                <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
+                    Fecha</th>
             </tr>
         </thead>
         <tbody>
@@ -69,6 +71,9 @@
                         </td>
                         <td>
                             {{ $guia->guides }}
+                        </td>
+                        <td>
+                            {{ $dateP }}
                         </td>
                     </tr>
                 @endif

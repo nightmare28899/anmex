@@ -67,9 +67,19 @@ class View extends Component
     public function store()
     {
         if ($this->cpText) {
-            $bitacoraFound = Bitacora::where('cp', $this->cpText)->first();
+            $bitacoraFound = Bitacora::where('cp', $this->cpText)->whereDate('created_at', '=', now())->first();
             $bitacoraFound->chofer = $this->clienteBarraBuscadora['nombre'];
             $bitacoraFound->save();
+
+            $guiaFound = Guias::join('domicilio_entregar', 'domicilio_entregar.id', '=', 'guias.id_domicilio')
+                ->where('domicilio_entregar.cp', $this->cpText)
+                ->whereDate('guias.created_at', '=', now())
+                ->get();
+                
+            foreach ($guiaFound as $key => $value) {
+                $value->id_chofer = $this->clienteBarraBuscadora['id'];
+                $value->save();
+            }
 
             $this->cpText = '';
             $this->clienteBarraBuscadora = null;
@@ -107,6 +117,7 @@ class View extends Component
                 'dateNow' => $this->date,
                 'postalCode' => $this->postalCodeSend,
                 'quantity' => $this->arrayCp,
+                'dateP' => $this->date,
             ]
         )
             ->setPaper('A5', 'landscape')
@@ -244,7 +255,7 @@ class View extends Component
             ->join('clientes', 'clientes.id', 'guias.id_cliente')
             ->where('domicilio_entregar.cp', $cp)
             ->where('guias.status', '!=', 'inactivo')
-            ->where('guias.estatus_entrega', '!=', 'entregado')
+            ->whereDate('guias.created_at', $this->from)
             ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'clientes.nombre')
             ->get();
 
@@ -277,12 +288,12 @@ class View extends Component
         if ($this->showFilterCp) {
             $guias = $this->getGuides($this->postalCodeSend);
         } else {
-
-            $guias = Bitacora::whereDate('created_at', $this->from)
+            
+            $guias = Bitacora::whereDate('created_at', '=', $this->from)
                 ->select('chofer', 'guides', 'cp')
                 ->groupBy('cp')
                 ->paginate(10);
-
+            
             if ($this->cpPDF) {
                 $this->showFirstPDF($guias);
                 $this->cpPDF = false;

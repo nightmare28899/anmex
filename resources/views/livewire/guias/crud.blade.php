@@ -2,12 +2,22 @@
     <!-- Navbar -->
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-        <div class="text-end">
-            <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modal"
-                wire:click="resetInputs">
-                <i class="material-icons opacity-10 pb-1">add</i>
-                Nuevo registro
-            </button>
+        <div class="d-flex justify-content-end">
+            <div class="text-start">
+                <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modalClient"
+                    wire:click="resetInputs">
+                    <i class="material-icons opacity-10 pb-1">person</i>
+                    Nuevo cliente
+                </button>
+            </div>
+            &nbsp;&nbsp;&nbsp;
+            <div class="text-end">
+                <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modal"
+                    wire:click="resetInputs">
+                    <i class="material-icons opacity-10 pb-1">add</i>
+                    Nuevo registro
+                </button>
+            </div>
         </div>
 
         <div class="input-group input-group-outline my-3 bg-white">
@@ -66,6 +76,44 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
+                                    <input type="search" id="queryDom" class="w-full form-control" name="queryDom"
+                                        placeholder="Escribe el domicilio" wire:model="queryDom" autocomplete="off" />
+
+                                    @if (!empty($queryDom))
+
+                                        <div
+                                            class="position-absolute top-100 list-group shadow translate-middle-x inputSearch">
+
+                                            @if (!empty($domiciliosBuscados))
+
+                                                @foreach ($domiciliosBuscados as $i => $buscado)
+                                                    <div wire:click="selectDomicilio({{ $i }})"
+                                                        class="absolute list-item list-none p-2 rounded-md cursor-pointer search">
+                                                        {{ $buscado['domicilio'] }}
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <div class="list-item list-none p-2">No hay resultado</div>
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
+                                    <textarea type="text" class="form-control" placeholder="Nombre del domicilio" disabled
+                                        wire:model="domicilioTextArea"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
+                                    <input type="text" class="form-control" value="Estatus: Pendiente" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
                                     {{-- @if (!$editStatus)
                                         <label class="form-label">Id Externo*</label>
                                     @endif --}}
@@ -78,25 +126,8 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="input-group input-group-outline my-3">
-                                    <select class="form-control" wire:model="id_domicilio">
-                                        <option style="display: none;">Selecciona un domicilio</option>
-                                        @foreach ($domiciliosFound as $domicilio)
-                                            <option value="{{ $domicilio->id }}">
-                                                {{ $domicilio->domicilio }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="input-group input-group-outline my-3">
-                                    <input type="text" class="form-control" value="Estatus: Pendiente" disabled>
-                                </div>
-                            </div>
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
                                     <input class="form-check-input mr-4 border" type="checkbox" wire:model="guiaStatus"
@@ -154,6 +185,76 @@
                         <button type="button" class="btn bg-gradient-primary"
                             data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn bg-gradient-primary" wire:click="delete">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal client --}}
+        <div wire:ignore.self class="modal fade" id="modalClient" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title font-weight-normal" id="exampleModalLabel">
+                            {{ $editStatus ? __('Actualizar Cliente') : __('Crear Cliente') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
+                                    @if (!$editStatus)
+                                        <label class="form-label">Nombre del Cliente*</label>
+                                    @endif
+                                    <input type="text" class="form-control" required wire:model.defer="nombre">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
+                                    @if (!$editStatus)
+                                        <label class="form-label">Telefono*</label>
+                                    @endif
+                                    <input type="text" class="form-control"
+                                        required wire:model.defer="telefono">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
+                                    @if (!$editStatus)
+                                        <label class="form-label">Código postal*</label>
+                                    @endif
+                                    <input type="text" class="form-control"
+                                        required wire:model.defer="cp">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
+                                    <textarea type="text" class="form-control" required wire:model.defer="domicilio" placeholder="Coloca el domicilio"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
+                                    <textarea type="text" class="form-control" required wire:model.defer="observaciones" placeholder="Coloca las observaciones"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @if ($editStatus)
+                            <button type="button" class="btn bg-gradient-primary" wire:click="update">Actualizar
+                                Registro</button>
+                        @else
+                            <button type="button" class="btn bg-gradient-primary" wire:click="createCliente">Crear
+                                Registro</button>
+                        @endif
                     </div>
                 </div>
             </div>
