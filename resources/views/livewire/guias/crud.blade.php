@@ -5,6 +5,7 @@
         <div class="text-end">
             <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modal"
                 wire:click="resetInputs">
+                <i class="material-icons opacity-10 pb-1">add</i>
                 Nuevo registro
             </button>
         </div>
@@ -36,10 +37,8 @@
 
                                     @if (!empty($query))
 
-                                        <div class="fixed top-0 right-0 bottom-0 left-0" wire:click="resetear"></div>
-
-                                        <div class="absolute z-10 list-group bg-white rounded-md shadow-lg"
-                                            style="width: 15.5rem;">
+                                        <div
+                                            class="position-absolute top-100 list-group shadow translate-middle-x inputSearch">
 
                                             @if (!empty($clientesBuscados))
 
@@ -71,7 +70,8 @@
                                         <label class="form-label">Id Externo*</label>
                                     @endif --}}
                                     @if (!$guiaStatus)
-                                        <input type="text" class="form-control" wire:model.defer="id_externo" placeholder="Id Externo">
+                                        <input type="text" class="form-control" wire:model.defer="id_externo"
+                                            placeholder="Id Externo">
                                     @else
                                         <input type="text" class="form-control" wire:model="id_externo = ''"
                                             disabled>
@@ -128,6 +128,32 @@
                             <button type="button" class="btn bg-gradient-primary" wire:click="store">Crear
                                 Registro</button>
                         @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Delete --}}
+        <div wire:ignore.self class="modal fade" id="modalDelete" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title font-weight-normal" id="exampleModalLabel">
+                            Eliminar Registro
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>¿Estás seguro que deseas dejar inactivo el registro?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-primary"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn bg-gradient-primary" wire:click="delete">Confirmar</button>
                     </div>
                 </div>
             </div>
@@ -217,10 +243,13 @@
                                         <button type="button" class="btn bg-gradient-primary"
                                             wire:click="edit({{ $guia->id }})" data-bs-toggle="modal"
                                             data-bs-target="#modal">
+                                            <i class="material-icons opacity-10 pb-1">edit</i>
                                             Editar
                                         </button>
-                                        <button type="button" class="btn bg-gradient-danger"
-                                            wire:click="delete({{ $guia->id }})">
+                                        <button type="button" class="btn bg-gradient-danger" data-bs-toggle="modal"
+                                            data-bs-target="#modalDelete"
+                                            wire:click="showWarningMessage({{ $guia->id }})">
+                                            <i class="material-icons opacity-10 pb-1">cancel</i>
                                             Eliminar
                                         </button>
                                     </div>

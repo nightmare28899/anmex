@@ -57,19 +57,21 @@
         </thead>
         <tbody>
             @foreach ($guias as $key => $guia)
-                <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
-                    <td>
-                        {{ $guia->cp }}
-                    </td>
-                    <td>
-                        {{ $chofer[$key] }}
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                        {{ $quantity[$key] }}
-                    </td>
-                </tr>
+                @if ($guia->guides != 0)
+                    <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
+                        <td>
+                            {{ $guia->cp }}
+                        </td>
+                        <td>
+                            {{ $guia->chofer }}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            {{ $guia->guides }}
+                        </td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

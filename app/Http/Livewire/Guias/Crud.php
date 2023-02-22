@@ -16,7 +16,7 @@ class Crud extends Component
 {
     use WithPagination;
 
-    public $id_externo, $id_cliente, $id_domicilio, $estatus_entrega = 'Pendiente', $guia_prepago, $guiaStatus = false, $status = 'created', $editStatus = false, $guiaFound, $search = "", $domiciliosFound = [], $idGuia;
+    public $id_externo, $id_cliente, $id_domicilio, $estatus_entrega = 'Pendiente', $guia_prepago, $guiaStatus = false, $status = 'created', $editStatus = false, $guiaFound, $search = "", $domiciliosFound = [], $idGuia, $idGuiaDelete;
 
     public $query = '', $clientesBuscados = [], $clienteBarraBuscadora = null;
 
@@ -62,11 +62,11 @@ class Crud extends Component
             ]);
         } else {
             Guias::create([
-                'id_externo' => $this->id_externo,
+                'id_externo' => $this->guiaStatus == false ? $this->id_externo : '-',
                 'id_cliente' => $this->clienteBarraBuscadora['id'],
                 'id_domicilio' => $this->id_domicilio,
                 'estatus_entrega' => 'Pendiente',
-                'guia_prepago' => $this->guia_prepago,
+                'guia_prepago' => $this->guia_prepago == true ? $this->guia_prepago : '-',
                 'fecha_entrega' => 'Pendiente',
                 'status' => 'activo',
             ]);
@@ -112,17 +112,24 @@ class Crud extends Component
         $this->id_domicilio = $guiaFound->id_domicilio;
     }
 
-    public function delete($id)
+    public function showWarningMessage($id)
     {
-        $guiaFound = Guias::find($id);
+        $this->idGuiaDelete = $id;
+    }
+
+    public function delete()
+    {
+        $guiaFound = Guias::find($this->idGuiaDelete);
         $guiaFound->update([
             'status' => 'inactivo',
         ]);
 
         $this->status = 'error';
         $this->dispatchBrowserEvent('alert', [
-            'message' => '¡Guía eliminada correctamente!'
+            'message' => '¡Guía inactiva correctamente!'
         ]);
+
+        $this->dispatchBrowserEvent('close-modal');
     }
 
     public function resetInputs()

@@ -5,6 +5,7 @@
         <div class="text-end">
             <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modal"
                 wire:click="resetInputs">
+                <i class="material-icons opacity-10 pb-1">add</i>
                 Nuevo registro
             </button>
         </div>
@@ -15,8 +16,7 @@
         </div>
 
         <!-- Modal -->
-        <div wire:ignore.self class="modal fade" id="modal" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div wire:ignore.self class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -90,6 +90,7 @@
                                     <button type="button" class="btn bg-gradient-primary"
                                         wire:click="edit({{ $cliente->id }})" data-bs-toggle="modal"
                                         data-bs-target="#modal">
+                                        <i class="material-icons opacity-10 pb-1">edit</i>
                                         Editar
                                     </button>
                                     {{-- <button type="button" class="btn bg-gradient-danger"

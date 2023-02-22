@@ -5,6 +5,7 @@
         <div class="text-end">
             <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modal"
                 wire:click="resetInputs">
+                <i class="material-icons opacity-10 pb-1">add</i>
                 Nuevo registro
             </button>
         </div>
@@ -38,10 +39,7 @@
 
                                     @if (!empty($query))
 
-                                        <div class="fixed top-0 right-0 bottom-0 left-0" wire:click="resetear"></div>
-
-                                        <div class="absolute z-10 list-group bg-white rounded-md shadow-lg"
-                                            style="width: 15.5rem;">
+                                        <div class="position-absolute top-100 list-group shadow translate-middle-x inputSearch">
 
                                             @if (!empty($clientesBuscados))
 
@@ -69,18 +67,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    @if (!$editStatus)
-                                        <label class="form-label">Telefono*</label>
-                                    @endif
-                                    <input type="text" class="form-control" required wire:model.defer="telefono">
+                                    <input type="text" class="form-control" placeholder="Coloca el telefono" required
+                                        wire:model.defer="telefono">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    @if (!$editStatus)
-                                        <label class="form-label">Código postal*</label>
-                                    @endif
-                                    <input type="text" class="form-control" required wire:model.defer="cp">
+                                    <input type="text" class="form-control" placeholder="Coloca el código postal"
+                                        required wire:model.defer="cp">
                                 </div>
                             </div>
                         </div>
@@ -127,15 +121,15 @@
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Domicilios</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
+                                Id Cliente</th>
+                            <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
+                                Cliente</th>
+                            <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Código postal</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Telefono</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Observaciones</th>
-                            <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
-                                Id Cliente</th>
-                            <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
-                                Cliente</th>
                             <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
                                 Acciones</th>
                         </tr>
@@ -150,6 +144,12 @@
                                     {{ $domicilio->domicilio }}
                                 </td>
                                 <td>
+                                    {{ $domicilio->cliente_id }}
+                                </td>
+                                <td>
+                                    {{ $domicilio->nombre }}
+                                </td>
+                                <td>
                                     {{ $domicilio->cp }}
                                 </td>
                                 <td>
@@ -159,15 +159,10 @@
                                     {{ $domicilio->observaciones }}
                                 </td>
                                 <td>
-                                    {{ $domicilio->cliente_id }}
-                                </td>
-                                <td>
-                                    {{ $domicilio->nombre }}
-                                </td>
-                                <td>
                                     <button type="button" class="btn bg-gradient-primary"
                                         wire:click="edit({{ $domicilio->id }})" data-bs-toggle="modal"
                                         data-bs-target="#modal">
+                                        <i class="material-icons opacity-10 pb-1">edit</i>
                                         Editar
                                     </button>
                                     {{-- <button type="button" class="btn bg-gradient-danger"

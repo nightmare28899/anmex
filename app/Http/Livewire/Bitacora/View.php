@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Guias;
 use App\Models\DomiciliosE;
 use App\Models\Choferes;
+use App\Models\Bitacora;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -66,10 +67,12 @@ class View extends Component
     public function store()
     {
         if ($this->cpText) {
-            array_push(
-                $this->finalArray,
-                [$this->cpText => $this->clienteBarraBuscadora['nombre']],
-            );
+            $bitacoraFound = Bitacora::where('cp', $this->cpText)->first();
+            $bitacoraFound->chofer = $this->clienteBarraBuscadora['nombre'];
+            $bitacoraFound->save();
+
+            $this->cpText = '';
+            $this->clienteBarraBuscadora = null;
 
             $this->dispatchBrowserEvent('close-modal');
             $this->status = 'created';
@@ -79,7 +82,7 @@ class View extends Component
         } else {
             $this->status = 'error';
             $this->dispatchBrowserEvent('alert', [
-                'message' => ($this->status == 'created') ? '¡Todos los campos son requeridos!' : ''
+                'message' => ($this->status == 'error') ? '¡Todos los campos son requeridos!' : ''
             ]);
         }
     }
@@ -104,7 +107,6 @@ class View extends Component
                 'dateNow' => $this->date,
                 'postalCode' => $this->postalCodeSend,
                 'quantity' => $this->arrayCp,
-                'chofer' => $this->arrayCpNames,
             ]
         )
             ->setPaper('A5', 'landscape')
@@ -151,7 +153,6 @@ class View extends Component
     public function removeDates()
     {
         $this->from = null;
-        $this->to = null;
     }
 
     public function selectAll()
@@ -165,20 +166,39 @@ class View extends Component
         }
     }
 
+    public function undelivered()
+    {
+        if ($this->selected) {
+            for ($i = 0; $i < count($this->selected); $i++) {
+                $guia = Guias::find($this->selected[$i]);
+
+                $guia->estatus_entrega = 'Sin Entregar';
+                $guia->fecha_entrega = 'Pendiente';
+
+                $guia->save();
+            }
+
+            if ($this->marked) {
+                $this->marked = false;
+            }
+
+            $this->status = 'updated';
+            $this->toast($this->status);
+            $this->selected = [];
+        } else {
+            $this->status = 'created';
+            $this->toast($this->status);
+        }
+    }
+
     public function changeStatus()
     {
         if ($this->selected) {
             for ($i = 0; $i < count($this->selected); $i++) {
                 $guia = Guias::find($this->selected[$i]);
 
-                if ($guia->estatus_entrega == 'Entregado') {
-                    $guia->estatus_entrega = 'Pendiente';
-                    $guia->fecha_entrega = 'Pendiente';
-                } else {
-                    $guia->estatus_entrega = 'Entregado';
-                    $guia->fecha_entrega = Carbon::now()->format('d/m/Y');
-
-                }
+                $guia->estatus_entrega = 'Entregado';
+                $guia->fecha_entrega = Carbon::now()->format('d/m/Y');
 
                 $guia->save();
             }
@@ -204,18 +224,7 @@ class View extends Component
         if ($this->from) {
             $guias = Guias::join('domicilio_entregar', 'domicilio_entregar.id', 'guias.id_domicilio')
                 ->join('clientes', 'clientes.id', 'guias.id_cliente')
-                ->where('domicilio_entregar.cp', $cp)
                 ->whereDate('guias.created_at', $this->from)
-                ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'clientes.nombre')
-                ->paginate(10);
-
-            if ($this->guidePDF) {
-                $this->showpdf($guias);
-                $this->guidePDF = false;
-            }
-        } else {
-            $guias = Guias::join('domicilio_entregar', 'domicilio_entregar.id', 'guias.id_domicilio')
-                ->join('clientes', 'clientes.id', 'guias.id_cliente')
                 ->where('domicilio_entregar.cp', $cp)
                 ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'clientes.nombre')
                 ->paginate(10);
@@ -234,8 +243,14 @@ class View extends Component
         $guias = Guias::join('domicilio_entregar', 'domicilio_entregar.id', 'guias.id_domicilio')
             ->join('clientes', 'clientes.id', 'guias.id_cliente')
             ->where('domicilio_entregar.cp', $cp)
+            ->where('guias.status', '!=', 'inactivo')
+            ->where('guias.estatus_entrega', '!=', 'entregado')
             ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'clientes.nombre')
             ->get();
+
+        $bitacoraFound = Bitacora::where('cp', $cp)->first();
+        $bitacoraFound->guides = $guias->count();
+        $bitacoraFound->save();
 
         return $guias->count();
     }
@@ -256,13 +271,17 @@ class View extends Component
 
     public function render()
     {
-        $this->date = Carbon::now()->format('Y/m/d');
+        $this->date = Carbon::now();
         $this->cpList = DomiciliosE::select('cp')->groupBy('cp')->get();
 
         if ($this->showFilterCp) {
             $guias = $this->getGuides($this->postalCodeSend);
         } else {
-            $guias = DomiciliosE::select('cp')->whereDate('domicilio_entregar.created_at', $this->from)->groupBy('cp')->paginate(10);
+
+            $guias = Bitacora::whereDate('created_at', $this->from)
+                ->select('chofer', 'guides', 'cp')
+                ->groupBy('cp')
+                ->paginate(10);
 
             if ($this->cpPDF) {
                 $this->showFirstPDF($guias);

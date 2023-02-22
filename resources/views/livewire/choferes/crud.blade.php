@@ -5,6 +5,7 @@
         <div class="text-end">
             <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modal"
                 wire:click="resetInputs">
+                <i class="material-icons opacity-10 pb-1">add</i>
                 Nuevo registro
             </button>
         </div>
@@ -116,6 +117,7 @@
                                     <button type="button" class="btn bg-gradient-primary"
                                         wire:click="edit({{ $chofer->id }})" data-bs-toggle="modal"
                                         data-bs-target="#modal">
+                                        <i class="material-icons opacity-10 pb-1">edit</i>
                                         Editar
                                     </button>
                                     {{-- <button type="button" class="btn bg-gradient-danger"

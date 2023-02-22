@@ -60,29 +60,31 @@
         </thead>
         <tbody>
             @foreach ($guias as $guia)
-                <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
-                    <td>
-                        {{ $guia->id }}
-                    </td>
-                    <td>
-                        {{ $guia->id_externo }}
-                    </td>
-                    <td>
-                        {{ $guia->id_cliente }}
-                    </td>
-                    <td>
-                        {{ $guia->nombre }}
-                    </td>
-                    <td>
-                        {{ $guia->estatus_entrega }}
-                    </td>
-                    <td>
-                        {{ $guia->guia_prepago }}
-                    </td>
-                    <td>
-                        {{ $guia->fecha_captura }}
-                    </td>
-                </tr>
+                @if ($guia->estatus_entrega != 'Entregado' && $guia->status != 'inactivo')
+                    <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
+                        <td>
+                            {{ $guia->id }}
+                        </td>
+                        <td>
+                            {{ $guia->id_externo }}
+                        </td>
+                        <td>
+                            {{ $guia->id_cliente }}
+                        </td>
+                        <td>
+                            {{ $guia->nombre }}
+                        </td>
+                        <td>
+                            {{ $guia->estatus_entrega }}
+                        </td>
+                        <td>
+                            {{ $guia->guia_prepago }}
+                        </td>
+                        <td>
+                            {{ $guia->created_at }}
+                        </td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

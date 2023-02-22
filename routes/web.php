@@ -25,6 +25,10 @@ use App\Http\Livewire\Guias\ViewPDF;
 use App\Http\Livewire\Bitacora\View as ViewBitacora;
 use App\Http\Livewire\Bitacora\GuideViewPDF;
 use App\Http\Livewire\Bitacora\FirstPDF;
+use App\Http\Livewire\Reportes\Index;
+use App\Http\Livewire\Reportes\ReporteEntregadosView;
+use App\Http\Livewire\Reportes\IndexRejected;
+use App\Http\Livewire\Reportes\ReporteViewRejected;
 use GuzzleHttp\Middleware;
 
 /*
@@ -72,4 +76,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('bitacora', ViewBitacora::class)->name('bitacora');
     Route::get('vista-pdf-guia', GuideViewPDF::class)->name('vista-pdf-guia');
     Route::get('vista-pdf-cp', FirstPDF::class)->name('vista-pdf-cp');
+    Route::get('reporte-entregados', Index::class)->name('reporte-entregados');
+    Route::get('entregados-vista', ReporteEntregadosView::class)->name('entregados-vista');
+    Route::get('reporte-devueltos', IndexRejected::class)->name('reporte-devueltos');
+    Route::get('devueltos-vista', ReporteViewRejected::class)->name('devueltos-vista');
 });

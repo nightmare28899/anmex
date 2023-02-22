@@ -1,8 +1,4 @@
 <div class="m-3">
-    {{-- <div class="input-group input-group-outline my-3 bg-white">
-        <input type="text" class="form-control" wire:model="search" placeholder="Escribe el Código Postal">
-    </div> --}}
-
     <!-- Modal -->
     <div wire:ignore.self class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -26,10 +22,8 @@
 
                                 @if (!empty($query))
 
-                                    <div class="fixed top-0 right-0 bottom-0 left-0" wire:click="resetear"></div>
-
-                                    <div class="absolute z-10 list-group bg-white rounded-md shadow-lg"
-                                        style="width: 15.5rem;">
+                                    <div
+                                        class="position-absolute top-100 list-group shadow translate-middle-x inputSearch">
 
                                         @if (!empty($clientesBuscados))
 
@@ -71,8 +65,8 @@
                         <button type="button" class="btn bg-gradient-primary" wire:click="update">Actualizar
                             Registro</button>
                     @else
-                        <button type="button" class="btn bg-gradient-primary" wire:click="store">Crear
-                            Registro</button>
+                        <button type="button" class="btn bg-gradient-primary" wire:click="store">Agregar
+                            Chofer</button>
                     @endif
                 </div>
             </div>
@@ -83,6 +77,7 @@
         <div class="d-flex col-7 mx-auto">
             <div class="col mt-4">
                 <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modal">
+                    <i class="material-icons opacity-10 pb-1">add</i>
                     Agregar Chofer
                 </button>
             </div>
@@ -90,19 +85,15 @@
                 <label>Selecciona la Fecha</label>
                 <input type="date" class="form-control" wire:model="from">
             </div>
-            {{-- &nbsp;
-            <div class="input-group input-group-static my-3 mx-6 col">
-                <label>Fecha Fin</label>
-                <input type="date" class="form-control" wire:model="to">
-            </div> --}}
             <div class="col">
-                <button type="button" class="btn bg-gradient-primary mt-4" wire:click="removeDates">
+                {{-- <button type="button" class="btn bg-gradient-primary mt-4" wire:click="removeDates">
                     Resetear
-                </button>
+                </button> --}}
             </div>
         </div>
         <div class="float-end">
             <button type="button" class="btn bg-gradient-primary" wire:click="showPDFCp">
+                <i class="material-icons opacity-10 pb-1">picture_as_pdf</i>
                 Generar PDF
             </button>
         </div>
@@ -123,22 +114,24 @@
                     </thead>
                     <tbody>
                         @foreach ($guias as $key => $guia)
-                            <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
-                                <td>
-                                    <a class="table-hover cursor-pointer"
-                                        wire:click="getGuides({{ $guia->cp }})">{{ $guia->cp }}</a>
-                                </td>
-                                <?php $dataChofer = App\Http\Livewire\Bitacora\View::dataChofer($guia->cp); ?>
-                                <td>
-                                    {{ $dataChofer }}
-                                </td>
-                                <td>
-                                </td>
-                                <?php $guiasFunction = App\Http\Livewire\Bitacora\View::guiasQuantity($guia->cp); ?>
-                                <td>
-                                    {{ $guiasFunction }}
-                                </td>
-                            </tr>
+                            <?php $guiasFunction = App\Http\Livewire\Bitacora\View::guiasQuantity($guia->cp); ?>
+                            @if ($guiasFunction != 0)
+                                <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
+                                    <td>
+                                        <a class="table-hover cursor-pointer"
+                                            wire:click="getGuides({{ $guia->cp }})">{{ $guia->cp }}</a>
+                                    </td>
+                                    <td>
+                                        {{ $guia->chofer }}
+                                    </td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        {{ $guiasFunction }}
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
@@ -150,15 +143,23 @@
         <div>
             <a wire:click="back" class="table-hover cursor-pointer">Regresar</a>
         </div>
-        <div class="float-end">
-            <button type="button" class="btn bg-gradient-primary" wire:click="showPDFGuia">
-                Generar PDF
-            </button>
-        </div>
-        <div class="mt-3">
-            <button type="button" class="btn bg-gradient-danger" wire:click="selectAll">
-                {{ !$marked ? __('Marcar todos') : __('Desmarcar todos') }}
-            </button>
+        <div class="d-flex justify-content-between">
+            <div class="mt-3">
+                <button type="button" class="btn bg-gradient-danger" wire:click="selectAll">
+                    {{ !$marked ? __('Marcar todos') : __('Desmarcar todos') }}
+                </button>
+            </div>
+            <div class="mt-3">
+                <button type="button" class="btn bg-gradient-danger" wire:click="undelivered">
+                    No entregado
+                </button>
+            </div>
+            <div class="mt-3">
+                <button type="button" class="btn bg-gradient-primary" wire:click="showPDFGuia">
+                    <i class="material-icons opacity-10 pb-1">picture_as_pdf</i>
+                    Generar PDF
+                </button>
+            </div>
         </div>
 
         <div class="card mt-3 col-12">
@@ -184,32 +185,32 @@
                     <tbody>
                         @foreach ($guias as $guia)
                             @if ($guia->estatus_entrega != 'Entregado' && $guia->status != 'inactivo')
-                            <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
-                                <td>
-                                    <input type="checkbox" wire:model="selected" value="{{ $guia->id }}">
-                                </td>
-                                <td>
-                                    {{ $guia->id }}
-                                </td>
-                                <td>
-                                    {{ $guia->id_externo }}
-                                </td>
-                                <td>
-                                    {{ $guia->id_cliente }}
-                                </td>
-                                <td>
-                                    {{ $guia->nombre }}
-                                </td>
-                                <td>
-                                    {{ $guia->estatus_entrega }}
-                                </td>
-                                <td>
-                                    {{ $guia->guia_prepago }}
-                                </td>
-                                <td>
-                                    {{ $guia->created_at }}
-                                </td>
-                            </tr>
+                                <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
+                                    <td>
+                                        <input type="checkbox" wire:model="selected" value="{{ $guia->id }}">
+                                    </td>
+                                    <td>
+                                        {{ $guia->id }}
+                                    </td>
+                                    <td>
+                                        {{ $guia->id_externo }}
+                                    </td>
+                                    <td>
+                                        {{ $guia->id_cliente }}
+                                    </td>
+                                    <td>
+                                        {{ $guia->nombre }}
+                                    </td>
+                                    <td>
+                                        {{ $guia->estatus_entrega }}
+                                    </td>
+                                    <td>
+                                        {{ $guia->guia_prepago }}
+                                    </td>
+                                    <td>
+                                        {{ $guia->created_at }}
+                                    </td>
+                                </tr>
                             @endif
                         @endforeach
                     </tbody>
@@ -219,7 +220,7 @@
 
         <div class="float-end mt-3">
             <button type="button" class="btn bg-gradient-success" wire:click="changeStatus">
-                Guardar estados
+                Entregado
             </button>
         </div>
     @endif

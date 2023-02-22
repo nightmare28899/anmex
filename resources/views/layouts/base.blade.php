@@ -66,13 +66,14 @@
                 case '¡Guía creada correctamente!':
                 case '¡PDF Generado correctamente!':
                 case '¡Chofer agregado!':
+                case '¡Chofer agregado correctamente!':
                     toastr.success(event.detail.message, '¡Exito!');
                     break;
                 case '¡Chofer eliminado correctamente!':
                 case '¡Auto eliminado correctamente!':
                 case '¡Cliente eliminado correctamente!':
                 case '¡Domicilio de entrega eliminado correctamente!':
-                case '¡Guía eliminada correctamente!':
+                case '¡Guía inactiva correctamente!':
                 case '¡Todos los campos son requeridos!':
                 case '¡No se ha seleccionado ninguna guía!':
                     toastr.error(event.detail.message, '¡Alerta!');
@@ -96,6 +97,7 @@
     <script>
         window.addEventListener('close-modal', event => {
             $('#modal').modal('hide');
+            $('#modalDelete').modal('hide');
         });
     </script>
 </body>
