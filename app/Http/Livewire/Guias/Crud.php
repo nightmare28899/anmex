@@ -135,6 +135,9 @@ class Crud extends Component
                 'message' => '¡Falta el domicilio!'
             ]);
         } else {
+
+            $bitacoraFound = Bitacora::where('cp', $this->domicilioBarraBuscadora['cp'])->first();
+
             Guias::create([
                 'id_externo' => $this->guiaStatus == false ? $this->id_externo : '',
                 'id_cliente' => $this->clienteBarraBuscadora['id'],
@@ -143,6 +146,7 @@ class Crud extends Component
                 'guia_prepago' => $this->guiaStatus == true ? $this->guia_prepago : '',
                 'fecha_entrega' => 'Pendiente',
                 'status' => 'activo',
+                'id_chofer' => $bitacoraFound->count() > 0 ? $bitacoraFound->id_chofer : null,
             ]);
 
             $this->status = 'created';

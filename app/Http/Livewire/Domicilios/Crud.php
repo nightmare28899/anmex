@@ -74,7 +74,7 @@ class Crud extends Component
                 'fechaActual' => Carbon::now()->format('d/m/Y'),
             ]);
 
-            $bitacoraFound = Bitacora::where('cp', $this->cp)->whereDate('created_at', '=', now())->get();
+            $bitacoraFound = Bitacora::where('cp', $this->cp)->get();
             if ($bitacoraFound->count() == 0) {
                 Bitacora::create([
                     'cp' => $this->cp,

@@ -48,13 +48,39 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <div class="input-group input-group-outline">
+                                <div class="input-group input-group-outline my-3">
+
+                                    <input type="search" id="queryCP" class="w-full form-control" name="queryCP"
+                                        placeholder="Escribe el código postal" wire:model="queryCP"
+                                        autocomplete="off" />
+
+                                    @if (!empty($queryCP))
+
+                                        <div
+                                            class="position-absolute top-100 list-group shadow translate-middle-x inputSearch">
+
+                                            @if (!empty($cpBuscados))
+
+                                                @foreach ($cpBuscados as $i => $buscado)
+                                                    <div wire:click="selectCP({{ $i }})"
+                                                        class="list-item list-none p-2 rounded-md cursor-pointer search">
+                                                        {{ $buscado['cp'] }}
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <div class="list-item list-none p-2">No hay resultado</div>
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="input-group input-group-outline my-3">
-                                <select class="form-control text-center" wire:model.defer="cpText">
-                                    <option style="display: none;">Selecciona un código postal</option>
-                                    @foreach ($cpList as $cp)
-                                        <option value="{{ $cp->cp }}">{{ $cp->cp }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" placeholder="Nombre del código postal"
+                                    value="{{ $cpBarraBuscadora ? $cpBarraBuscadora['cp'] : '' }}"
+                                    disabled>
                             </div>
                         </div>
                     </div>
@@ -172,8 +198,10 @@
                             </th>
                             <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">Id</th>
                             <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">Id externo</th>
-                            <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">Id cliente</th>
-                            <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">Nombre</th>
+                            <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">Domicilio
+                                Entregar</th>
+                            <th class="text-uppercase text-dark text-sm font-weight-bolder opacity-7">Nombre Cliente
+                            </th>
                             <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
                                 Estatus entrega</th>
                             <th class="text-center text-uppercase text-dark text-xs font-weight-bolder opacity-7">
@@ -185,32 +213,32 @@
                     <tbody>
                         @foreach ($guias as $guia)
                             {{-- @if ($guia->estatus_entrega != 'Entregado' && $guia->status != 'inactivo') --}}
-                                <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
-                                    <td>
-                                        <input type="checkbox" wire:model="selected" value="{{ $guia->id }}">
-                                    </td>
-                                    <td>
-                                        {{ $guia->id }}
-                                    </td>
-                                    <td>
-                                        {{ $guia->id_externo }}
-                                    </td>
-                                    <td>
-                                        {{ $guia->id_cliente }}
-                                    </td>
-                                    <td>
-                                        {{ $guia->nombre }}
-                                    </td>
-                                    <td>
-                                        {{ $guia->estatus_entrega }}
-                                    </td>
-                                    <td>
-                                        {{ $guia->guia_prepago }}
-                                    </td>
-                                    <td>
-                                        {{ $guia->created_at }}
-                                    </td>
-                                </tr>
+                            <tr class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 text-center">
+                                <td>
+                                    <input type="checkbox" wire:model="selected" value="{{ $guia->id }}">
+                                </td>
+                                <td>
+                                    {{ $guia->id }}
+                                </td>
+                                <td>
+                                    {{ $guia->id_externo }}
+                                </td>
+                                <td>
+                                    {{ $guia->domicilio }}
+                                </td>
+                                <td>
+                                    {{ $guia->nombre }}
+                                </td>
+                                <td>
+                                    {{ $guia->estatus_entrega }}
+                                </td>
+                                <td>
+                                    {{ $guia->guia_prepago }}
+                                </td>
+                                <td>
+                                    {{ $guia->created_at }}
+                                </td>
+                            </tr>
                             {{-- @endif --}}
                         @endforeach
                     </tbody>

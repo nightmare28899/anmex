@@ -15,6 +15,7 @@ class Bitacora extends Model
         'id',
         'cp',
         'chofer',
+        'id_chofer',
         'guides',
     ];
 }

@@ -218,8 +218,7 @@
                                     @if (!$editStatus)
                                         <label class="form-label">Telefono*</label>
                                     @endif
-                                    <input type="text" class="form-control"
-                                        required wire:model.defer="telefono">
+                                    <input type="text" class="form-control" required wire:model.defer="telefono">
                                 </div>
                             </div>
                         </div>
@@ -229,20 +228,21 @@
                                     @if (!$editStatus)
                                         <label class="form-label">Código postal*</label>
                                     @endif
-                                    <input type="text" class="form-control"
-                                        required wire:model.defer="cp">
+                                    <input type="text" class="form-control" required wire:model.defer="cp">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    <textarea type="text" class="form-control" required wire:model.defer="domicilio" placeholder="Coloca el domicilio"></textarea>
+                                    <textarea type="text" class="form-control" required wire:model.defer="domicilio"
+                                        placeholder="Coloca el domicilio"></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    <textarea type="text" class="form-control" required wire:model.defer="observaciones" placeholder="Coloca las observaciones"></textarea>
+                                    <textarea type="text" class="form-control" required wire:model.defer="observaciones"
+                                        placeholder="Coloca las observaciones"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -277,6 +277,8 @@
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Domicilio</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
+                                Código Postal</th>
+                            <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Estatus Entrega</th>
                             <th class="text-uppercase text-dark text-xs font-weight-bolder opacity-7 ps-2">
                                 Fecha Captura</th>
@@ -306,6 +308,9 @@
                                 </td>
                                 <td>
                                     {{ $guia->domicilio }}
+                                </td>
+                                <td>
+                                    {{ $guia->cp }}
                                 </td>
                                 <td>
                                     {{ $guia->estatus_entrega }}

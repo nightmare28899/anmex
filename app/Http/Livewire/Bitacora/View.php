@@ -19,7 +19,7 @@ class View extends Component
 
     public $search = '', $showFilterCp = false, $postalCodeSend, $selected = [], $status = 'created', $marked = false, $from, $to, $guidePDF = false, $date, $cpPDF = false, $arrayCp = [], $choferSelected = [], $editStatus = false;
 
-    public $query = '', $clientesBuscados = [], $clienteBarraBuscadora = null, $cpList = [], $cpSelected = '', $finalArray = [], $cpText, $arrayCpNames = [];
+    public $query = '', $clientesBuscados = [], $clienteBarraBuscadora = null, $cpList = [], $cpSelected = '', $finalArray = [], $cpText, $arrayCpNames = [], $queryCP = '', $cpBuscados = [], $cpBarraBuscadora = null;
 
     public function mount()
     {
@@ -32,6 +32,8 @@ class View extends Component
     {
         $this->query = '';
         $this->clientesBuscados = [];
+        $this->queryCP = '';
+        $this->cpBuscados = [];
     }
 
     public function selectContact($pos)
@@ -43,10 +45,29 @@ class View extends Component
         }
     }
 
+    public function selectCP($pos)
+    {
+        $this->cpBarraBuscadora = $this->cpBuscados[$pos] ?? null;
+        if ($this->cpBarraBuscadora) {
+            $this->cpBarraBuscadora;
+            $this->resetear();
+        }
+    }
+
     public function updatedQuery()
     {
         if ($this->query != '') {
             $this->clientesBuscados = Choferes::where('nombre', 'like', '%' . $this->query . '%')
+                ->limit(6)
+                ->get()
+                ->toArray();
+        }
+    }
+    
+    public function updatedQueryCP()
+    {
+        if ($this->queryCP != '') {
+            $this->cpBuscados = Bitacora::where('cp', 'like', '%' . $this->queryCP . '%')
                 ->limit(6)
                 ->get()
                 ->toArray();
@@ -66,22 +87,25 @@ class View extends Component
 
     public function store()
     {
-        if ($this->cpText) {
-            $bitacoraFound = Bitacora::where('cp', $this->cpText)->whereDate('created_at', '=', now())->first();
+        if ($this->cpBarraBuscadora) {
+            $bitacoraFound = Bitacora::where('cp', $this->cpBarraBuscadora['cp'])->first();
             $bitacoraFound->chofer = $this->clienteBarraBuscadora['nombre'];
+            $bitacoraFound->id_chofer = $this->clienteBarraBuscadora['id'];
             $bitacoraFound->save();
 
             $guiaFound = Guias::join('domicilio_entregar', 'domicilio_entregar.id', '=', 'guias.id_domicilio')
-                ->where('domicilio_entregar.cp', $this->cpText)
+                ->where('domicilio_entregar.cp', $this->cpBarraBuscadora['cp'])
                 ->whereDate('guias.created_at', '=', now())
+                ->select('guias.*', 'domicilio_entregar.cp')
                 ->get();
-                
-            foreach ($guiaFound as $key => $value) {
-                $value->id_chofer = $this->clienteBarraBuscadora['id'];
-                $value->save();
+            
+            for ($i = 0; $i < count($guiaFound); $i++) {
+                $guia = Guias::find($guiaFound[$i]->id);
+                $guia->id_chofer = $this->clienteBarraBuscadora['id'];
+                $guia->save();
             }
 
-            $this->cpText = '';
+            $this->cpBarraBuscadora = null;
             $this->clienteBarraBuscadora = null;
 
             $this->dispatchBrowserEvent('close-modal');
@@ -288,12 +312,10 @@ class View extends Component
         if ($this->showFilterCp) {
             $guias = $this->getGuides($this->postalCodeSend);
         } else {
-            
-            $guias = Bitacora::whereDate('created_at', '=', $this->from)
-                ->select('chofer', 'guides', 'cp')
+            $guias = Bitacora::select('chofer', 'guides', 'cp')
                 ->groupBy('cp')
                 ->paginate(10);
-            
+
             if ($this->cpPDF) {
                 $this->showFirstPDF($guias);
                 $this->cpPDF = false;

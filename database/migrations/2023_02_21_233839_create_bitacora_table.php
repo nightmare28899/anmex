@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('cp')->nullable();
             $table->string('chofer')->nullable();
+            $table->string('id_chofer')->nullable();
             $table->string('guides')->nullable();
             $table->timestamps();
         });

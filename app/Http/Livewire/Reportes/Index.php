@@ -85,6 +85,7 @@ class Index extends Component
                 ->join('clientes', 'clientes.id', '=', 'guias.id_cliente')
                 ->join('choferes', 'choferes.id', '=', 'guias.id_chofer')
                 ->where('guias.estatus_entrega', '=', 'Entregado')
+                ->whereDate('guias.created_at', now())
                 ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'domicilio_entregar.cp', 'domicilio_entregar.cliente_id', 'domicilio_entregar.fechaActual', 'clientes.nombre', 'choferes.nombre as choferName')
                 ->paginate(10);
 
@@ -94,6 +95,7 @@ class Index extends Component
                     ->join('choferes', 'choferes.id', '=', 'guias.id_chofer')
                     ->where('guias.estatus_entrega', '=', 'Entregado')
                     ->where('guias.id_chofer', $this->choferSelected)
+                    ->whereDate('guias.created_at', now())
                     ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'domicilio_entregar.cp', 'domicilio_entregar.cliente_id', 'domicilio_entregar.fechaActual', 'clientes.nombre', 'choferes.nombre as choferName')
                     ->paginate(10);
             }
