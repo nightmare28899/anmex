@@ -78,7 +78,8 @@ class Crud extends Component
     public function updatedQueryDom()
     {
         if ($this->queryDom != '' && $this->clienteBarraBuscadora) {
-            $this->domiciliosBuscados = DomiciliosE::where('cliente_id', $this->clienteBarraBuscadora['id'])->where('domicilio', 'like', '%' . $this->queryDom . '%')
+            $this->domiciliosBuscados = DomiciliosE::where('cliente_id', $this->clienteBarraBuscadora['id'])
+                ->where('domicilio', 'like', '%' . $this->queryDom . '%')
                 ->limit(6)
                 ->get()
                 ->toArray();
@@ -136,9 +137,6 @@ class Crud extends Component
                 'message' => '¡Falta el domicilio!'
             ]);
         } else {
-
-            $bitacoraFound = Bitacora::where('cp', $this->domicilioBarraBuscadora['cp'])->first();
-
             Guias::create([
                 'id_externo' => $this->guiaStatus == false ? $this->id_externo : '',
                 'id_cliente' => $this->clienteBarraBuscadora['id'],

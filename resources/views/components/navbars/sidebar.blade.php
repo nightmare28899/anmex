@@ -73,6 +73,15 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link text-white {{ Route::currentRouteName() == 'corte-guias' ? ' active bg-gradient-primary' : '' }}  "
+                    href="{{ route('corte-guias') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">auto_stories</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Corte Guias</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link text-white {{ Route::currentRouteName() == 'bitacora' ? ' active bg-gradient-primary' : '' }}  "
                     href="{{ route('bitacora') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">

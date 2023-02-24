@@ -29,6 +29,8 @@ use App\Http\Livewire\Reportes\Index;
 use App\Http\Livewire\Reportes\ReporteEntregadosView;
 use App\Http\Livewire\Reportes\IndexRejected;
 use App\Http\Livewire\Reportes\ReporteViewRejected;
+use App\Http\Livewire\Corte\Guias;
+use App\Http\Livewire\Corte\ViewPDF as ViewPDFCorte;
 use GuzzleHttp\Middleware;
 
 /*
@@ -80,4 +82,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('entregados-vista', ReporteEntregadosView::class)->name('entregados-vista');
     Route::get('reporte-devueltos', IndexRejected::class)->name('reporte-devueltos');
     Route::get('devueltos-vista', ReporteViewRejected::class)->name('devueltos-vista');
+    Route::get('corte-guias', Guias::class)->name('corte-guias');
+    Route::get('vista-pdf-corte', ViewPDFCorte::class)->name('vista-pdf-corte');
 });
