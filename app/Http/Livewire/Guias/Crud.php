@@ -7,6 +7,7 @@ use App\Models\Guias;
 use App\Models\Clientes;
 use App\Models\DomiciliosE;
 use App\Models\Bitacora;
+use App\Models\PostalCode;
 use Carbon\Carbon;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Redirect;
@@ -111,10 +112,10 @@ class Crud extends Component
                 'fechaActual' => Carbon::now()->format('d/m/Y'),
             ]);
 
-            $bitacoraFound = Bitacora::where('cp', $this->cp)->whereDate('created_at', '=', now())->get();
-            if ($bitacoraFound->count() == 0) {
-                Bitacora::create([
-                    'cp' => $this->cp,
+            $postalCodeFound = PostalCode::where('postal_code', $this->cp)->get();
+            if ($postalCodeFound->count() == 0) {
+                PostalCode::create([
+                    'postal_code' => $this->cp,
                 ]);
             }
 
@@ -146,7 +147,6 @@ class Crud extends Component
                 'guia_prepago' => $this->guiaStatus == true ? $this->guia_prepago : '',
                 'fecha_entrega' => 'Pendiente',
                 'status' => 'activo',
-                'id_chofer' => $bitacoraFound->count() > 0 ? $bitacoraFound->id_chofer : null,
             ]);
 
             $this->status = 'created';

@@ -7,6 +7,7 @@ use App\Models\Guias;
 use App\Models\DomiciliosE;
 use App\Models\Choferes;
 use App\Models\Bitacora;
+use App\Models\PostalCode;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -63,11 +64,12 @@ class View extends Component
                 ->toArray();
         }
     }
-    
+
     public function updatedQueryCP()
     {
         if ($this->queryCP != '') {
-            $this->cpBuscados = Bitacora::where('cp', 'like', '%' . $this->queryCP . '%')
+            $this->cpBuscados = PostalCode::where('postal_code', 'like', '%' . $this->queryCP . '%')
+                ->groupBy('postal_code')
                 ->limit(6)
                 ->get()
                 ->toArray();
@@ -88,17 +90,31 @@ class View extends Component
     public function store()
     {
         if ($this->cpBarraBuscadora) {
-            $bitacoraFound = Bitacora::where('cp', $this->cpBarraBuscadora['cp'])->first();
-            $bitacoraFound->chofer = $this->clienteBarraBuscadora['nombre'];
-            $bitacoraFound->id_chofer = $this->clienteBarraBuscadora['id'];
-            $bitacoraFound->save();
+
+            $bitacoraFound = Bitacora::where('cp', $this->cpBarraBuscadora['postal_code'])
+                ->whereDate('created_at', '=', now())
+                ->first();
+
+            if ($bitacoraFound) {
+                $bitacora = Bitacora::find($bitacoraFound->id);
+                $bitacora->chofer = $this->clienteBarraBuscadora['nombre'];
+                $bitacora->id_chofer = $this->clienteBarraBuscadora['id'];
+                $bitacora->cp = $this->cpBarraBuscadora['postal_code'];
+                $bitacora->save();
+            } else {
+                $bitacora = new Bitacora();
+                $bitacora->chofer = $this->clienteBarraBuscadora['nombre'];
+                $bitacora->id_chofer = $this->clienteBarraBuscadora['id'];
+                $bitacora->cp = $this->cpBarraBuscadora['postal_code'];
+                $bitacora->save();
+            }
 
             $guiaFound = Guias::join('domicilio_entregar', 'domicilio_entregar.id', '=', 'guias.id_domicilio')
-                ->where('domicilio_entregar.cp', $this->cpBarraBuscadora['cp'])
+                ->where('domicilio_entregar.cp', $this->cpBarraBuscadora['postal_code'])
                 ->whereDate('guias.created_at', '=', now())
                 ->select('guias.*', 'domicilio_entregar.cp')
                 ->get();
-            
+
             for ($i = 0; $i < count($guiaFound); $i++) {
                 $guia = Guias::find($guiaFound[$i]->id);
                 $guia->id_chofer = $this->clienteBarraBuscadora['id'];
@@ -283,7 +299,7 @@ class View extends Component
             ->select('guias.*', 'domicilio_entregar.cp', 'domicilio_entregar.domicilio', 'clientes.nombre')
             ->get();
 
-        $bitacoraFound = Bitacora::where('cp', $cp)->first();
+        $bitacoraFound = Bitacora::where('cp', $cp)->whereDate('created_at', now())->first();
         $bitacoraFound->guides = $guias->count();
         $bitacoraFound->save();
 
@@ -312,9 +328,17 @@ class View extends Component
         if ($this->showFilterCp) {
             $guias = $this->getGuides($this->postalCodeSend);
         } else {
-            $guias = Bitacora::select('chofer', 'guides', 'cp')
-                ->groupBy('cp')
-                ->paginate(10);
+            if ($this->from) {
+                $guias = Bitacora::whereDate('created_at', $this->from)
+                    ->select('chofer', 'guides', 'cp')
+                    ->groupBy('cp')
+                    ->paginate(10);
+            } else {
+                $guias = Bitacora::whereDate('created_at', now())
+                    ->select('chofer', 'guides', 'cp')
+                    ->groupBy('cp')
+                    ->paginate(10);
+            }
 
             if ($this->cpPDF) {
                 $this->showFirstPDF($guias);

@@ -65,7 +65,7 @@
                                                 @foreach ($cpBuscados as $i => $buscado)
                                                     <div wire:click="selectCP({{ $i }})"
                                                         class="list-item list-none p-2 rounded-md cursor-pointer search">
-                                                        {{ $buscado['cp'] }}
+                                                        {{ $buscado['postal_code'] }}
                                                     </div>
                                                 @endforeach
                                             @else
@@ -79,7 +79,7 @@
                         <div class="col-md-6">
                             <div class="input-group input-group-outline my-3">
                                 <input type="text" class="form-control" placeholder="Nombre del código postal"
-                                    value="{{ $cpBarraBuscadora ? $cpBarraBuscadora['cp'] : '' }}"
+                                    value="{{ $cpBarraBuscadora ? $cpBarraBuscadora['postal_code'] : '' }}"
                                     disabled>
                             </div>
                         </div>
