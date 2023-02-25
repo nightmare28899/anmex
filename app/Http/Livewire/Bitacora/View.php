@@ -211,7 +211,10 @@ class View extends Component
         $this->marked = !$this->marked;
 
         if ($this->marked) {
-            $this->selected = Guias::pluck('id')->toArray();
+            $this->selected = Guias::join('domicilio_entregar', 'domicilio_entregar.id', 'guias.id_domicilio')
+                ->where('domicilio_entregar.cp', $this->postalCodeSend)
+                ->select('guias.*', 'domicilio_entregar.cp')
+                ->pluck('id')->toArray();
         } else {
             $this->selected = [];
         }
