@@ -1,5 +1,5 @@
 .search:hover {
-    background-color: rgba(248, 45, 106, 0.945);
+    background: linear-gradient(195deg, #eca740 0%, #d8a61b 100%);
     color: white;
     border-radius: 5px;
 }

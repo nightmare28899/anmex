@@ -300,8 +300,10 @@ class View extends Component
             ->get();
 
         $bitacoraFound = Bitacora::where('cp', $cp)->whereDate('created_at', now())->first();
-        $bitacoraFound->guides = $guias->count();
-        $bitacoraFound->save();
+        if ($bitacoraFound) {
+            $bitacoraFound->guides = $guias->count();
+            $bitacoraFound->save();
+        }
 
         return $guias->count();
     }
