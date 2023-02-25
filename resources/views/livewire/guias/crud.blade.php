@@ -182,7 +182,7 @@
                         <p>¿Estás seguro que deseas dejar inactivo el registro?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn bg-gradient-primary"
+                        <button type="button" class="btn bg-gradient-danger"
                             data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn bg-gradient-primary" wire:click="delete">Confirmar</button>
                     </div>
