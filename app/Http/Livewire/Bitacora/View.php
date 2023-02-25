@@ -306,6 +306,12 @@ class View extends Component
         if ($bitacoraFound) {
             $bitacoraFound->guides = $guias->count();
             $bitacoraFound->save();
+
+            for ($i = 0; $i < count($guias); $i++) {
+                $guiaFound = Guias::find($guias[$i]['id']);
+                $guiaFound->id_chofer = $bitacoraFound->id_chofer;
+                $guiaFound->save();
+            }
         }
 
         return $guias->count();
