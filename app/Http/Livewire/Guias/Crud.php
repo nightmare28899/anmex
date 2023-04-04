@@ -88,15 +88,11 @@ class Crud extends Component
 
     public function createCliente()
     {
-        if ($this->nombre == '' || $this->telefono == '' || $this->cp == '' || $this->domicilio == '' || $this->observaciones == '') {
-            $this->status = 'error';
-            $this->dispatchBrowserEvent('alert', [
-                'message' => '¡Todos los campos son requeridos!'
-            ]);
+        if ($this->nombre != '' && $this->telefono != '' && $this->cp != '' && $this->domicilio != '' && $this->observaciones != '') {
 
             $this->rules;
             $this->validate();
-        } else {
+
             Clientes::create([
                 'nombre' => $this->nombre,
                 'fechaActual' => Carbon::now()->format('d/m/Y'),
@@ -121,9 +117,27 @@ class Crud extends Component
             }
 
             $this->status = 'created';
-            $this->toast($this->status);
-            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', [
+                'message' => ($this->status == 'created') ? '¡Cliente creado correctamente!' : '¡Cliente actualizado correctamente!'
+            ]);
+
+            $this->query = $this->nombre;
+
+            $this->clientesBuscados = Clientes::where('nombre', 'like', '%' . $this->query . '%')
+                ->limit(6)
+                ->get()
+                ->toArray();
+
             $this->resetInputs();
+
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('open-modal');
+
+        } else {
+            $this->status = 'error';
+            $this->dispatchBrowserEvent('alert', [
+                'message' => '¡Todos los campos son requeridos!'
+            ]);
         }
     }
 
@@ -148,9 +162,7 @@ class Crud extends Component
             ]);
 
             $this->status = 'created';
-            $this->dispatchBrowserEvent('alert', [
-                'message' => ($this->status == 'created') ? 'Cliente creado correctamente!' : 'Cliente actualizado correctamente!'
-            ]);
+            $this->toast($this->status);
             $this->dispatchBrowserEvent('close-modal');
             $this->resetInputs();
         }

@@ -9,7 +9,7 @@
                     </script>,
                     created by
                     <strong> Kevin López González</strong>,
-                    My website: <strong><a href="https://kevinlg.dev/" target="_blank">kevindev.dev</a></strong>
+                    My website: <strong><a href="https://kevinlg.dev/" target="_blank">kevinlg.dev</a></strong>
                 </div>
             </div>
             {{-- <div class="col-lg-6">

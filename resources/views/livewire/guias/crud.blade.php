@@ -3,13 +3,13 @@
     <!-- End Navbar -->
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-end">
-            <div class="text-start">
+            {{-- <div class="text-start">
                 <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modalClient"
                     wire:click="resetInputs">
                     <i class="material-icons opacity-10 pb-1">person</i>
                     Nuevo cliente
                 </button>
-            </div>
+            </div> --}}
             &nbsp;&nbsp;&nbsp;
             <div class="text-end">
                 <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modal"
@@ -39,7 +39,17 @@
                     </div>
 
                     <div class="modal-body">
+
+                        <div class="d-flex flex-row mb-1">
+                            <button type="button" class="btn border rounded" data-bs-toggle="modal"
+                                data-bs-target="#modalClient" wire:click="resetInputs">
+                                <i class="material-icons opacity-10 pb-1">person</i>
+                                Nuevo cliente
+                            </button>
+                        </div>
+
                         <div class="row">
+
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
                                     <input type="search" id="query" class="w-full form-control" name="query"
@@ -130,8 +140,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
-                                    <input class="form-check-input mr-4 border" type="checkbox" wire:model="guiaStatus"
-                                        id="flexCheckDefault">
+                                    <input class="form-check-input mr-4 border" type="checkbox"
+                                        wire:model="guiaStatus" id="flexCheckDefault">
                                     &nbsp;&nbsp;&nbsp;
                                     <label class="form-check-label ml-3" for="flexCheckDefault">
                                         Guía Prepago
@@ -198,9 +208,9 @@
                     <div class="modal-header">
                         <h5 class="modal-title font-weight-normal" id="exampleModalLabel">
                             {{ $editStatus ? __('Actualizar Cliente') : __('Crear Cliente') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
-                        </button>
+                        </button> --}}
                     </div>
 
                     <div class="modal-body">
@@ -231,14 +241,15 @@
                                     <input type="text" class="form-control" required wire:model.defer="cp">
                                 </div>
                             </div>
+                            <div class="col-md-6"></div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
                                     <textarea type="text" class="form-control" required wire:model.defer="domicilio"
                                         placeholder="Coloca el domicilio"></textarea>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-outline my-3">
                                     <textarea type="text" class="form-control" required wire:model.defer="observaciones"

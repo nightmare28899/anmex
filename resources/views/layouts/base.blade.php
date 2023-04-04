@@ -101,6 +101,10 @@
             $('#modalDelete').modal('hide');
             $('#modalClient').modal('hide');
         });
+
+        window.addEventListener('open-modal', event => {
+            $('#modal').modal('show');
+        });
     </script>
 </body>
 
